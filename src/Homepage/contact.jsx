@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 // Import images based on the locations in your HTML
 import contactBg from "../assets/img/contact-bg.jpg";
@@ -11,14 +12,67 @@ import envelopCopy from "../assets/img/envelop-copy.png";
 import speechCopy from "../assets/img/speech-copy.png";
 
 const Contact = () => {
-  const handleSubmit = (e) => {
+  // State for form fields
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+  // State for loading preloader
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted");
+
+    // Basic validation: check if any field is empty
+    if (!fullname || !email || !phone || !message) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    // Basic email format validation
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    // Show preloader
+    setIsLoading(true);
+
+    try {
+      // Post data to the backend
+      await axios.post("http://localhost:5000/api/v1/contact/submit", {
+        fullname,
+        email,
+        phone,
+        message,
+      });
+
+      alert("Your feedback has been submitted successfully.");
+
+      // Clear the form by resetting state
+      setFullname("");
+      setEmail("");
+      setPhone("");
+      setMessage("");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Error submitting form. Please try again later.");
+    } finally {
+      // Hide preloader
+      setIsLoading(false);
+    }
   };
 
   return (
     <>
+      {/* Preloader */}
+      {isLoading && (
+        <div id="preloader">
+          <div className="loader"></div>
+        </div>
+      )}
+
       {/* Hero Section Begin */}
       <section
         className="hero-section set-bg"
@@ -32,7 +86,7 @@ const Contact = () => {
               </div>
             </div>
             <div className="page-nav">
-              <a href="./news.html" className="left-nav">
+              <a href="/news" className="left-nav">
                 <i className="lnr lnr-arrow-left"></i> News
               </a>
             </div>
@@ -51,19 +105,19 @@ const Contact = () => {
                   <h2>Contact Information</h2>
                   <ul>
                     <li>
-                      <img src={placeholderCopy} alt="" />
+                      <img src={placeholderCopy} alt="Address Icon" />
                       <span>1525 Boring Lane, Los Angeles, CA</span>
                     </li>
                     <li>
-                      <img src={phoneCopy} alt="" />
+                      <img src={phoneCopy} alt="Phone Icon" />
                       <span>+91 603-535-4592</span>
                     </li>
                     <li>
-                      <img src={envelop} alt="" />
+                      <img src={envelop} alt="Email Icon" />
                       <span>hello@youremail.com</span>
                     </li>
                     <li>
-                      <img src={clockCopy} alt="" />
+                      <img src={clockCopy} alt="Clock Icon" />
                       <span>Everyday: 06:00 -22:00</span>
                     </li>
                   </ul>
@@ -99,28 +153,47 @@ const Contact = () => {
                     <div className="col-lg-12">
                       <p>From</p>
                       <div className="input-group">
-                        <input type="text" placeholder="Full Name" />
-                        <img src={edit} alt="" />
+                        <input
+                          type="text"
+                          placeholder="Full Name"
+                          value={fullname}
+                          onChange={(e) => setFullname(e.target.value)}
+                        />
+                        <img src={edit} alt="Edit Icon" />
                       </div>
                     </div>
                     <div className="col-lg-6">
                       <div className="input-group">
-                        <input type="email" placeholder="Email" />
-                        <img src={envelopCopy} alt="" />
+                        <input
+                          type="email"
+                          placeholder="Email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <img src={envelopCopy} alt="Envelope Icon" />
                       </div>
                     </div>
                     <div className="col-lg-6">
                       <div className="input-group phone-num">
-                        <input type="text" placeholder="Phone" />
-                        <img src={phoneCopy} alt="" />
+                        <input
+                          type="text"
+                          placeholder="Phone"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                        />
+                        <img src={phoneCopy} alt="Phone Icon" />
                       </div>
                     </div>
                     <div className="col-lg-12">
                       <div className="message">
                         <p>Message</p>
                         <div className="textarea">
-                          <textarea placeholder="Hi ..."></textarea>
-                          <img src={speechCopy} alt="" />
+                          <textarea
+                            placeholder="Hi ..."
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                          ></textarea>
+                          <img src={speechCopy} alt="Speech Icon" />
                         </div>
                       </div>
                     </div>

@@ -1,84 +1,13 @@
 import React from "react";
 import logo from "../assets/img/logo.png";
-import place from "../assets/img/placeholder.png";
-import phone from "../assets/img/phone.png";
 import clock from "../assets/img/clock.png";
 import speech from "../assets/img/speech.png";
+import Header from "./Header";
 const News = () => {
   return (
     <div>
-      {/* Page Preloder */}
-      <div id="preloder">
-        <div className="loader"></div>
-      </div>
+      <Header />
 
-      {/* Header Section Begin */}
-      <header className="header-section other-page">
-        <div className="container-fluid">
-          <div className="inner-header">
-            <div className="logo">
-              <a href="./index.html">
-                <img src={logo} alt="" />
-              </a>
-            </div>
-            <div className="top-widget">
-              <div className="top-info address">
-                <img src={place} alt="" />
-                <span>
-                  1525 Boring Lane, Los <br />
-                  Angeles, CA
-                </span>
-              </div>
-              <div className="top-info phone-num">
-                <img src={phone} alt="" />
-                <span>+1 (603)535-4592</span>
-              </div>
-            </div>
-            <div className="container">
-              <nav className="main-menu mobile-menu">
-                <ul>
-                  <li>
-                    <a href="./index.html">Home</a>
-                  </li>
-                  <li>
-                    <a href="./about-us.html">About</a>
-                  </li>
-                  <li>
-                    <a href="./rooms.html">Rooms</a>
-                  </li>
-                  <li>
-                    <a href="#">Facilities</a>
-                    <ul className="drop-menu">
-                      <li>
-                        <a href="#">Junior Suit</a>
-                      </li>
-                      <li>
-                        <a href="#">Double Room</a>
-                      </li>
-                      <li>
-                        <a href="#">Senior Suit</a>
-                      </li>
-                      <li>
-                        <a href="#">Single Room</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a href="./news.html">News</a>
-                  </li>
-                  <li>
-                    <a href="./contact.html">Contact</a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-            <div id="mobile-menu-wrap"></div>
-          </div>
-        </div>
-      </header>
-      {/* Header End */}
-
-      {/* Hero Section Begin */}
       <section className="hero-section set-bg" data-setbg="img/services-bg.jpg">
         <div className="hero-text">
           <div className="container">
@@ -88,10 +17,10 @@ const News = () => {
               </div>
             </div>
             <div className="page-nav">
-              <a href="./rooms.html" className="left-nav">
+              <a href="/rooms" className="left-nav">
                 <i className="lnr lnr-arrow-left"></i> Rooms
               </a>
-              <a href="./contact.html" className="right-nav">
+              <a href="/contact" className="right-nav">
                 Contact <i className="lnr lnr-arrow-right"></i>
               </a>
             </div>
@@ -142,7 +71,7 @@ const News = () => {
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="single-recent-post">
                       <div className="recent-pic">
-                        <img src={`${img / blog / recent - $i.jpg}`} alt="" />
+                        {/* <img src={`${img / blog / recent - $i.jpg}`} alt="" /> */}
                       </div>
                       <div className="recent-text">
                         <h5>Lorem ipsum dolor sit amet, consectetur.</h5>
@@ -177,7 +106,7 @@ const News = () => {
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="single-blog-post">
                     <div className="blog-pic">
-                      <img src={`${img / blog / blog - i.jpg}`} alt="" />
+                      {/* <img src={`${img / blog / blog - i.jpg}`} alt="" /> */}
                     </div>
                     <div className="blog-text">
                       <h4>What you should know before going in holidays.</h4>

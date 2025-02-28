@@ -14,19 +14,7 @@ const Header = () => {
               <img src={Logo} alt="" />
             </Link>
           </div>
-          <div className="top-widget">
-            <div className="top-info address">
-              <img src={Placeholder} alt="" />
-              <span>
-                1525 Boring Lane, Los <br />
-                Angeles, CA
-              </span>
-            </div>
-            <div className="top-info phone-num">
-              <img src={Phone} alt="" />
-              <span>+1 (603)535-4592</span>
-            </div>
-          </div>
+
           <div className="container">
             <nav className="main-menu mobile-menu">
               <ul>
@@ -34,7 +22,7 @@ const Header = () => {
                   <Link to="/">Home</Link>
                 </li>
                 <li>
-                  <Link to="/about-us">About</Link>
+                  <Link to="/aboutus">About</Link>
                 </li>
                 <li>
                   <Link to="/rooms">Rooms</Link>
@@ -64,6 +52,19 @@ const Header = () => {
                 </li>
               </ul>
             </nav>
+          </div>
+          <div className="col-xl-3 d-flex justify-content-end">
+            <div className="dropdown login-dropdown">
+              <button className="dropdown-btn">Login</button>
+              <ul className="dropdown-content">
+                <li>
+                  <a href="adminlogin.html">Admin</a>
+                </li>
+                <li>
+                  <a href="login.html">User</a>
+                </li>
+              </ul>
+            </div>
           </div>
           <div id="mobile-menu-wrap"></div>
         </div>

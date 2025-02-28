@@ -5,32 +5,13 @@ import Placeholder from "../assets/img/placeholder.png";
 import Phone from "../assets/img/phone.png";
 import AboutUsBg from "../assets/img/about-us-bg.jpg";
 import VideoBg from "../assets/img/video-bg.jpg";
+import Header from "./Header";
 
-const HotelTemplate = () => {
+const AboutUs = () => {
   return (
     <div>
       {/* Header Section */}
-      <header className="header-section other-page">
-        <div className="container-fluid">
-          <div className="inner-header flex justify-between items-center p-4">
-            <div className="logo">
-              <a href="/">
-                <img src={Logo} alt="Logo" />
-              </a>
-            </div>
-            <div className="top-widget flex gap-4">
-              <div className="top-info flex items-center">
-                <img src={Placeholder} alt="Address" className="mr-2" />
-                <span>1525 Boring Lane, Los Angeles, CA</span>
-              </div>
-              <div className="top-info flex items-center">
-                <img src={Phone} alt="Phone" className="mr-2" />
-                <span>+1 (603) 535-4592</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section
@@ -100,4 +81,4 @@ const HotelTemplate = () => {
   );
 };
 
-export default HotelTemplate;
+export default AboutUs;

@@ -10,9 +10,7 @@ import Rooms2 from "../assets/img/room/rooms-2.jpg";
 const Rooms = () => {
   return (
     <div>
-      {/* Header Section */}
-      <Header />
-
+      <Header /> {/* Header Section */}
       {/* Hero Section */}
       <section
         className="hero-section set-bg"
@@ -28,7 +26,6 @@ const Rooms = () => {
           </div>
         </div>
       </section>
-
       {/* Rooms Section */}
       <section className="room-section spad">
         <div className="container">
@@ -95,7 +92,6 @@ const Rooms = () => {
           {/* Rest of your room components... */}
         </div>
       </section>
-
       {/* Footer Section */}
       <Footer />
     </div>

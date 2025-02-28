@@ -10,9 +10,9 @@ import RoomFooter3 from "../assets/img/room-footer-pic/room-3.jpg";
 import RoomFooter4 from "../assets/img/room-footer-pic/room-4.jpg";
 import Slider from "../assets/img/slider-1.jpg";
 import Logo from "../assets/img/logo.png";
+import Header from "./Header";
 
 const Homepage = () => {
-  // State for carousel
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [direction, setDirection] = useState(null);
@@ -23,7 +23,6 @@ const Homepage = () => {
     { image: Room3, alt: "Room 3" },
   ];
 
-  // Carousel navigation functions with animation direction
   const nextSlide = () => {
     if (isTransitioning) return;
     setDirection("right");
@@ -48,7 +47,6 @@ const Homepage = () => {
     }, 300);
   };
 
-  // Automatic slideshow
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
@@ -56,7 +54,6 @@ const Homepage = () => {
     return () => clearInterval(interval);
   }, [currentSlide, isTransitioning]);
 
-  // Handle direct slide selection
   const goToSlide = (index) => {
     if (isTransitioning || index === currentSlide) return;
     setDirection(index > currentSlide ? "right" : "left");
@@ -71,76 +68,7 @@ const Homepage = () => {
 
   return (
     <>
-      <header className="header-section">
-        {/* Header content remains the same */}
-        <div className="container-fluid">
-          <div className="inner-header">
-            <div className="logo">
-              <a href="./index.html">
-                <img src={InnerHeader} alt="" />
-              </a>
-            </div>
-            <div className="container">
-              <div className="row align-items-center">
-                <div className="col-xl-9">
-                  <nav className="main-menu mobile-menu">
-                    <ul>
-                      <li>
-                        <a href="./index.html">Home</a>
-                      </li>
-                      <li>
-                        <a href="./about-us.html">About</a>
-                      </li>
-                      <li>
-                        <a href="./rooms.html">Rooms</a>
-                      </li>
-                      <li>
-                        <a href="#">Facilities</a>
-                        <ul className="drop-menu">
-                          <li>
-                            <a href="#">Junior Suit</a>
-                          </li>
-                          <li>
-                            <a href="#">Double Room</a>
-                          </li>
-                          <li>
-                            <a href="#">Senior Suit</a>
-                          </li>
-                          <li>
-                            <a href="#">Single Room</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a href="./news.html">News</a>
-                      </li>
-                      <li>
-                        <a href="./contact.html">Contact</a>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
-                <div className="col-xl-3 d-flex justify-content-end">
-                  {/* Login Dropdown */}
-                  <div className="dropdown login-dropdown">
-                    <button className="dropdown-btn">Login</button>
-                    <ul className="dropdown-content">
-                      <li>
-                        <a href="adminlogin.html">Admin</a>
-                      </li>
-                      <li>
-                        <a href="login.html">User</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div id="mobile-menu-wrap"></div>
-          </div>
-        </div>
-      </header>
-
+      <Header />
       <div className="hero-slider">
         <div className="slider-item">
           <div
