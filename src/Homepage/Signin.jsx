@@ -129,7 +129,7 @@ const Signin = () => {
           >
             Don't have an account?{" "}
             <Link
-              to="/register"
+              to="/signup"
               style={{ color: "#9b59b6", textDecoration: "none" }}
             >
               Register now

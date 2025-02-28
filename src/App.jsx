@@ -11,6 +11,7 @@ import Header from "./Homepage/Header";
 import Footer from "./Homepage/Footer";
 import Signin from "./Homepage/Signin";
 import Registration from "./Homepage/Registration";
+import AdminLogin from "./Homepage/Admin";
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/news" element={<News />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Registration />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
       </Routes>
       <Footer />
     </BrowserRouter>

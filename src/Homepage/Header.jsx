@@ -126,10 +126,13 @@ const Header = () => {
                 <button className="dropdown-btn">Login</button>
                 <ul className="dropdown-content">
                   <li>
-                    <a href="adminlogin.html">Admin</a>
+                    <a href="/admin/login">Admin</a>
                   </li>
                   <li>
-                    <a href="login.html">User</a>
+                    <a href="/signin">Signin</a>
+                  </li>
+                  <li>
+                    <a href="/signup">Rgister</a>
                   </li>
                 </ul>
               </div>
