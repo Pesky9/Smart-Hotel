@@ -1,14 +1,14 @@
 import React from "react";
+// Correct way to import images in React
 import Logo from "../assets/img/logo.png";
+import Placeholder from "../assets/img/placeholder.png";
+import Phone from "../assets/img/phone.png";
+import AboutUsBg from "../assets/img/about-us-bg.jpg";
+import VideoBg from "../assets/img/video-bg.jpg";
 
 const HotelTemplate = () => {
   return (
     <div>
-      {/* Preloader */}
-      <div id="preloder">
-        <div className="loader"></div>
-      </div>
-
       {/* Header Section */}
       <header className="header-section other-page">
         <div className="container-fluid">
@@ -20,11 +20,11 @@ const HotelTemplate = () => {
             </div>
             <div className="top-widget flex gap-4">
               <div className="top-info flex items-center">
-                <img src="img/placeholder.png" alt="Address" className="mr-2" />
+                <img src={Placeholder} alt="Address" className="mr-2" />
                 <span>1525 Boring Lane, Los Angeles, CA</span>
               </div>
               <div className="top-info flex items-center">
-                <img src="img/phone.png" alt="Phone" className="mr-2" />
+                <img src={Phone} alt="Phone" className="mr-2" />
                 <span>+1 (603) 535-4592</span>
               </div>
             </div>
@@ -35,7 +35,7 @@ const HotelTemplate = () => {
       {/* Hero Section */}
       <section
         className="hero-section bg-cover bg-center"
-        style={{ backgroundImage: "url(img/about-us-bg.jpg)" }}
+        style={{ backgroundImage: `url(${AboutUsBg})` }}
       >
         <div className="hero-text text-center py-20">
           <h1 className="text-white text-4xl">About</h1>
@@ -46,9 +46,9 @@ const HotelTemplate = () => {
       <div className="about-us-room py-10">
         <div className="container mx-auto text-center">
           <h2 className="text-xl italic">
-            “At our hotel, it's not just about the stay; it's about the
-            unforgettable moments we create together. You’ll always remember how
-            we made you feel.”
+            "At our hotel, it's not just about the stay; it's about the
+            unforgettable moments we create together. You'll always remember how
+            we made you feel."
           </h2>
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             <p>
@@ -61,7 +61,7 @@ const HotelTemplate = () => {
             <p>
               We offer a personalized experience to each guest. Our team ensures
               your stay is enjoyable. Enjoy fine dining, a relaxing spa, or
-              explore the city’s attractions with ease. At our hotel, we make
+              explore the city's attractions with ease. At our hotel, we make
               every moment memorable.
             </p>
           </div>
@@ -71,7 +71,7 @@ const HotelTemplate = () => {
       {/* Video Tour Section */}
       <section
         className="video-tour bg-cover bg-center py-20"
-        style={{ backgroundImage: "url(img/video-bg.jpg)" }}
+        style={{ backgroundImage: `url(${VideoBg})` }}
       >
         <div className="text-center">
           <h2 className="text-white text-3xl">Video Hotel Tour</h2>
@@ -91,7 +91,7 @@ const HotelTemplate = () => {
       <footer className="footer-section bg-gray-900 text-white py-10">
         <div className="container mx-auto text-center">
           <div className="mb-4">
-            <img src="img/logo.png" alt="Footer Logo" className="mx-auto" />
+            <img src={Logo} alt="Footer Logo" className="mx-auto" />
           </div>
           <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
         </div>
