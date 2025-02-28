@@ -186,6 +186,10 @@ const ThumbnailCarousel = ({ images }) => {
   );
 };
 
+const Success = () => {
+  toast.success("Booking Successful!");
+};
+
 const Rooms = () => {
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -469,6 +473,7 @@ const Rooms = () => {
       <BookingConfirmationModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        Success={Success}
         roomType={selectedRoom.type}
         roomPrice={selectedRoom.price}
       />

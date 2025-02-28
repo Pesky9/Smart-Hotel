@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import InnerHeader from "../assets/img/logo.png";
 import Room1 from "../assets/img/room-slider/room-1.jpg";
 import Room2 from "../assets/img/room-slider/room-2.jpg";
 import Room3 from "../assets/img/room-slider/room-3.jpg";
@@ -9,10 +8,11 @@ import RoomFooter2 from "../assets/img/room-footer-pic/room-2.jpg";
 import RoomFooter3 from "../assets/img/room-footer-pic/room-3.jpg";
 import RoomFooter4 from "../assets/img/room-footer-pic/room-4.jpg";
 import Slider from "../assets/img/slider-1.jpg";
-import Logo from "../assets/img/logo.png";
-import Header from "./Header";
+import SurveyPopup from "./Survey";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Homepage = () => {
+const Homepage = ({ isLoggedIn }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [direction, setDirection] = useState(null);
@@ -21,6 +21,19 @@ const Homepage = () => {
   const [roomsCount, setRoomsCount] = useState(1);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState("Eg. Master suite");
+  const [showSurvey, setShowSurvey] = useState(false);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const lastShown = localStorage.getItem("surveyLastShown");
+      const today = new Date().toDateString();
+
+      if (lastShown !== today) {
+        setShowSurvey(true);
+        localStorage.setItem("surveyLastShown", today);
+      }
+    }
+  }, [isLoggedIn]);
 
   const slides = [
     { image: Room1, alt: "Room 1" },
@@ -101,8 +114,14 @@ const Homepage = () => {
     setIsSelectOpen(false);
   };
 
+  const Success = () => {
+    toast.success("Survey Submitted!");
+  };
+
   return (
     <>
+      <ToastContainer />
+      {showSurvey && <SurveyPopup Success={Success} />}
       <div className="hero-slider">
         <div className="slider-item">
           <div

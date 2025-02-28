@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { BaseURL } from "../BaseURL";
 
-const SurveyPopup = () => {
+const SurveyPopup = ({ Success }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [showSurvey, setShowSurvey] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
@@ -18,25 +23,41 @@ const SurveyPopup = () => {
 
   const handleNo = () => {
     setIsVisible(false);
+    toast.info("Maybe next time!");
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    try {
+      const verifyResponse = await axios.get(`${BaseURL}/user/verify`, {
+        withCredentials: true,
+      });
 
-    const formData = {
-      birthdayOffer: event.target.birthdayOffer.value,
-      weddingAnniversary: event.target.weddingAnniversary.value,
-      otherSpecialDays: event.target.otherSpecialDays.value,
-      festivalCelebration: event.target.festivalCelebration.value,
-      otherOccasions: event.target.otherOccasions.value,
-    };
+      const user_id = verifyResponse.data?.user?.id;
+      if (!user_id) throw new Error("User ID not found");
 
-    console.log("Survey Data:", formData);
-    alert("Thank you for completing the survey! 🎉");
-    setIsVisible(false);
+      const formData = {
+        birthdayOffer: event.target.birthdayOffer.value,
+        weddingAnniversary: event.target.weddingAnniversary.value,
+        otherSpecialDays: event.target.otherSpecialDays.value,
+        festivalCelebration: event.target.festivalCelebration.value,
+        otherOccasions: event.target.otherOccasions.value,
+      };
+
+      await axios.post(`${BaseURL}/user/survey`, {
+        user_id,
+        ans: formData,
+      });
+      Success();
+      setIsVisible(false);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Common styles for reusability
   const styles = {
     overlay: {
       display: "flex",
@@ -152,7 +173,7 @@ const SurveyPopup = () => {
         {/* Initial Question */}
         {!showSurvey && (
           <div>
-            <h2 style={styles.title}>Get Coupons! 🎉</h2>
+            <h2 style={styles.title}>Get Goodies! 🎉</h2>
             <p style={styles.paragraph}>
               Are you interested in taking a quick survey for exclusive coupons?
             </p>
@@ -241,8 +262,12 @@ const SurveyPopup = () => {
                 style={styles.input}
               />
 
-              <button type="submit" style={styles.submitButton}>
-                Submit
+              <button
+                type="submit"
+                style={styles.submitButton}
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Submit"}
               </button>
             </form>
           </div>
