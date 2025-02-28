@@ -17,7 +17,7 @@ const AboutUs = () => {
         className="hero-section bg-cover bg-center"
         style={{ backgroundImage: `url(${AboutUsBg})` }}
       >
-        <div className="hero-text text-center py-20">
+        <div className="hero-text py-20">
           <h1 className="text-white text-4xl">About</h1>
         </div>
       </section>

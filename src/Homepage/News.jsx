@@ -1,11 +1,14 @@
 import React from "react";
-import logo from "../assets/img/logo.png";
 import clock from "../assets/img/clock.png";
 import speech from "../assets/img/speech.png";
+import Services from "../assets/img/services-bg.jpg";
 const News = () => {
   return (
     <div>
-      <section className="hero-section set-bg" data-setbg="img/services-bg.jpg">
+      <section
+        className="hero-section set-bg"
+        style={{ backgroundImage: `url(${Services})` }}
+      >
         <div className="hero-text">
           <div className="container">
             <div className="row">
