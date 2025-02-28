@@ -11,7 +11,6 @@ const AboutUs = () => {
   return (
     <div>
       {/* Header Section */}
-      <Header />
 
       {/* Hero Section */}
       <section
@@ -67,16 +66,6 @@ const AboutUs = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer Section */}
-      <footer className="footer-section bg-gray-900 text-white py-10">
-        <div className="container mx-auto text-center">
-          <div className="mb-4">
-            <img src={Logo} alt="Footer Logo" className="mx-auto" />
-          </div>
-          <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 };

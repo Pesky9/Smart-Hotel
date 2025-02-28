@@ -204,8 +204,6 @@ const Rooms = () => {
 
   return (
     <div>
-      <Header /> {/* Header Section */}
-      {/* Hero Section */}
       <section
         className="hero-section set-bg"
         style={{ backgroundImage: `url(${Roomsbg})` }}
@@ -437,7 +435,6 @@ const Rooms = () => {
         </div>
       </section>
       {/* Footer Section */}
-      <Footer />
     </div>
   );
 };
