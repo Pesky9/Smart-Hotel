@@ -44,19 +44,36 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
     <header className="header-section other-page">
       <div className="container-fluid">
         <div className="inner-header">
+          {/* Mobile menu button - visible only on mobile */}
+          <div
+            className="d-block d-md-none"
+            style={{ position: "absolute", left: "15px", top: "20px" }}
+          >
+            <button
+              onClick={toggleMobileMenu}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "#fff",
+                fontSize: "24px",
+                padding: "5px",
+                cursor: "pointer",
+              }}
+            >
+              {isMobileMenuOpen ? "✕" : "☰"}
+            </button>
+          </div>
+
           <div className="logo">
             <Link to="/">
-              <img src={Logo} alt="Logo" />
+              <img src={Logo} alt="Logo" style={{ maxHeight: "60px" }} />
             </Link>
           </div>
 
           <div className="container">
-            <nav
-              className={`main-menu mobile-menu ${
-                isMobileMenuOpen ? "active" : ""
-              }`}
-            >
-              <ul>
+            {/* Desktop navigation - always visible on desktop */}
+            <nav className="main-menu d-none d-md-block">
+              <ul className="d-flex flex-row">
                 <li>
                   <Link to="/">Home</Link>
                 </li>
@@ -98,6 +115,240 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
                 )}
               </ul>
             </nav>
+
+            {/* Mobile navigation - slide in from left */}
+            {isMobileMenuOpen && (
+              <div
+                className="mobile-menu-overlay"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                  zIndex: 1000,
+                }}
+              ></div>
+            )}
+
+            <div
+              className="mobile-menu d-md-none"
+              style={{
+                position: "fixed",
+                top: 0,
+                left: isMobileMenuOpen ? 0 : "-280px",
+                width: "280px",
+                height: "100vh",
+                backgroundColor: "#333",
+                zIndex: 1001,
+                transition: "left 0.3s ease",
+                overflowY: "auto",
+                paddingTop: "60px",
+              }}
+            >
+              <ul style={{ listStyle: "none", padding: 0 }}>
+                <li
+                  style={{
+                    padding: "10px 20px",
+                    borderBottom: "1px solid rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <Link
+                    to="/"
+                    style={{
+                      color: "#fff",
+                      textDecoration: "none",
+                      display: "block",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li
+                  style={{
+                    padding: "10px 20px",
+                    borderBottom: "1px solid rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <Link
+                    to="/aboutus"
+                    style={{
+                      color: "#fff",
+                      textDecoration: "none",
+                      display: "block",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    About
+                  </Link>
+                </li>
+                <li
+                  style={{
+                    padding: "10px 20px",
+                    borderBottom: "1px solid rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <Link
+                    to="/rooms"
+                    style={{
+                      color: "#fff",
+                      textDecoration: "none",
+                      display: "block",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Rooms
+                  </Link>
+                </li>
+                <li
+                  style={{
+                    padding: "10px 20px",
+                    borderBottom: "1px solid rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <div
+                    style={{
+                      color: "#fff",
+                      cursor: "pointer",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                    onClick={(e) => {
+                      const submenu = e.currentTarget.nextElementSibling;
+                      if (submenu.style.display === "block") {
+                        submenu.style.display = "none";
+                      } else {
+                        submenu.style.display = "block";
+                      }
+                    }}
+                  >
+                    Facilities <span>▼</span>
+                  </div>
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      padding: 0,
+                      display: "none",
+                      backgroundColor: "rgba(255,255,255,0.1)",
+                    }}
+                  >
+                    <li style={{ padding: "10px 20px 10px 30px" }}>
+                      <a
+                        href="/rooms#single-room"
+                        style={{
+                          color: "#fff",
+                          textDecoration: "none",
+                          display: "block",
+                        }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Single Room
+                      </a>
+                    </li>
+                    <li style={{ padding: "10px 20px 10px 30px" }}>
+                      <a
+                        href="/rooms#double-room"
+                        style={{
+                          color: "#fff",
+                          textDecoration: "none",
+                          display: "block",
+                        }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Double Room
+                      </a>
+                    </li>
+                    <li style={{ padding: "10px 20px 10px 30px" }}>
+                      <a
+                        href="/rooms#suite-room"
+                        style={{
+                          color: "#fff",
+                          textDecoration: "none",
+                          display: "block",
+                        }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Suite Room
+                      </a>
+                    </li>
+                    <li style={{ padding: "10px 20px 10px 30px" }}>
+                      <a
+                        href="/rooms#deluxe-room"
+                        style={{
+                          color: "#fff",
+                          textDecoration: "none",
+                          display: "block",
+                        }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Deluxe Room
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li
+                  style={{
+                    padding: "10px 20px",
+                    borderBottom: "1px solid rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <Link
+                    to="/contact"
+                    style={{
+                      color: "#fff",
+                      textDecoration: "none",
+                      display: "block",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Contact
+                  </Link>
+                </li>
+                {isLoggedIn && (
+                  <>
+                    <li
+                      style={{
+                        padding: "10px 20px",
+                        borderBottom: "1px solid rgba(255,255,255,0.1)",
+                      }}
+                    >
+                      <Link
+                        to="/news"
+                        style={{
+                          color: "#fff",
+                          textDecoration: "none",
+                          display: "block",
+                        }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        News
+                      </Link>
+                    </li>
+                    <li
+                      style={{
+                        padding: "10px 20px",
+                        borderBottom: "1px solid rgba(255,255,255,0.1)",
+                      }}
+                    >
+                      <Link
+                        to="/orders"
+                        style={{
+                          color: "#fff",
+                          textDecoration: "none",
+                          display: "block",
+                        }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Orders
+                      </Link>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </div>
           </div>
 
           {isLoggedIn ? (
@@ -112,10 +363,10 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
                   src={profileImage}
                   alt="User Profile"
                   className="rounded-circle"
-                  style={{ width: "50px", height: "50px" }}
+                  style={{ width: "40px", height: "40px" }}
                 />
                 <span
-                  className="ml-3"
+                  className="ml-3 d-none d-sm-inline"
                   style={{
                     fontWeight: "bold",
                     fontSize: "1.2rem",
@@ -179,7 +430,7 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
                 <button className="dropdown-btn">Login</button>
                 <ul className="dropdown-content">
                   <li>
-                    <a href="/admin/login">Dashboard</a>
+                    <a href="/admin/login">Admin</a>
                   </li>
                   <li>
                     <a href="/signin">Signin</a>
@@ -191,8 +442,6 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
               </div>
             </div>
           )}
-
-          <div id="mobile-menu-wrap"></div>
         </div>
       </div>
     </header>
