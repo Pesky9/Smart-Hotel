@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/img/logo.png";
+import Cookies from "js-cookie";
 
 const Header = ({ isLoggedIn, username, profileImage }) => {
+  const navigate = useNavigate();
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
@@ -31,6 +34,11 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    location.reload();
+  };
 
   return (
     <header className="header-section other-page">
@@ -147,18 +155,18 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
                           Profile
                         </Link>
                       </li> */}
-                      <li>
-                        <Link
-                          to="/logout"
-                          style={{
-                            display: "block",
-                            padding: "10px 15px",
-                            color: "#333",
-                            textDecoration: "none",
-                          }}
-                        >
-                          Logout
-                        </Link>
+                      <li
+                        style={{
+                          display: "block",
+                          padding: "10px 15px",
+                          color: "#333",
+                          textDecoration: "none",
+                        }}
+                        onClick={() => {
+                          handleLogout();
+                        }}
+                      >
+                        Logout
                       </li>
                     </ul>
                   </div>

@@ -10,8 +10,6 @@ import "./assets/css/slicknav.min.css";
 import "./assets/css/style.css";
 import "./assets/css/jquery-ui.min.css";
 import "./assets/css/font-awesome.min.css";
-
-// import "./assets/css/style.css.map";
 import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(

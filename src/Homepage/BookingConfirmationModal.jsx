@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { BaseURL } from "../BaseURL";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BookingConfirmationModal = ({ isOpen, onClose, roomType, roomPrice }) => {
   const [checkInDate, setCheckInDate] = useState("");
@@ -93,6 +97,54 @@ const BookingConfirmationModal = ({ isOpen, onClose, roomType, roomPrice }) => {
   const minCheckOutDate = checkInDate
     ? formatDateForInput(new Date(new Date(checkInDate).getTime() + 86400000))
     : formatDateForInput(tomorrow);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const verifyResponse = await axios.get(`${BaseURL}/user/verify`, {
+        withCredentials: true,
+      });
+
+      const guest_id = verifyResponse.data?.user?.id;
+
+      // const formData = {
+      //   checkInDate,
+      //   checkOutDate,
+      //   adults,
+      //   children,
+      //   rooms,
+      //   couponCode,
+      //   discount,
+      //   total,
+      //   guest_id,
+      // };
+      const formData = {
+        guest_id,
+        checkin_date: checkInDate,
+        checkout_date: checkOutDate,
+      };
+
+      console.log("Form Data with Guest ID:", formData);
+
+      const bookingResponse = await axios.post(
+        `${BaseURL}/user/book-room`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Booking Successful:", bookingResponse.data);
+      toast.success("Booking Successful!");
+      onClose();
+    } catch (error) {
+      console.error("Error during booking process:", error);
+      toast.error(error.response.data.message);
+    }
+  };
 
   return (
     <div
@@ -521,11 +573,13 @@ const BookingConfirmationModal = ({ isOpen, onClose, roomType, roomPrice }) => {
               borderRadius: "4px",
               cursor: numberOfNights > 0 ? "pointer" : "default",
             }}
+            onClick={handleSubmit}
           >
             Confirm Booking
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

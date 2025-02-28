@@ -38,7 +38,6 @@ function App() {
         })
         .catch((error) => {
           console.error("User verification error:", error);
-          Cookies.remove("token");
           setIsLoggedIn(false);
         });
     } else {

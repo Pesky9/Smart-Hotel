@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 
-// Import React Components
-import Header from "./Header";
-import Footer from "./Footer";
 import BookingConfirmationModal from "./BookingConfirmationModal";
 
 // Import images
@@ -193,6 +193,11 @@ const Rooms = () => {
 
   // Function to open modal with room details
   const openBookingModal = (roomType, roomPrice) => {
+    const token = Cookies.get("token");
+    if (!token) {
+      toast.error("Please login to Book!");
+      return;
+    }
     setSelectedRoom({ type: roomType, price: roomPrice });
     setIsModalOpen(true);
   };
@@ -216,6 +221,7 @@ const Rooms = () => {
 
   return (
     <div>
+      <ToastContainer />
       <section
         className="hero-section set-bg"
         style={{ backgroundImage: `url(${Roomsbg})` }}

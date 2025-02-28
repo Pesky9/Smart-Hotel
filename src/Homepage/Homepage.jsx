@@ -739,7 +739,7 @@ const Homepage = () => {
                       </div>
                     </div>
 
-                    <button type="button">
+                    <button style={{ marginTop: "30px" }} type="button">
                       CHECK Availability <i className="lnr lnr-arrow-right"></i>
                     </button>
                   </form>
