@@ -16,7 +16,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Profile from "./assets/img/profile.jpeg";
 import { BaseURL } from "./BaseURL";
-import SurveyPopup from "./Homepage/Survey";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -59,7 +58,6 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/news" element={<News />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/survey" element={<SurveyPopup />} />
         <Route
           path="/signin"
           element={<Signin setIsLoggedIn={setIsLoggedIn} />}
