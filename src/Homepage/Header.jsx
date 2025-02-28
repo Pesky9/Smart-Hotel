@@ -171,7 +171,7 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
                 <button className="dropdown-btn">Login</button>
                 <ul className="dropdown-content">
                   <li>
-                    <a href="/admin/login">Admin</a>
+                    <a href="/admin/login">Dashboard</a>
                   </li>
                   <li>
                     <a href="/signin">Signin</a>
