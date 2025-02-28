@@ -1,14 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
 import Logo from "../assets/img/logo.png";
 
 const Header = ({ isLoggedIn, username, profileImage }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  const toggleProfileDropdown = () => {
+    setIsProfileDropdownOpen(!isProfileDropdownOpen);
+  };
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const profileElement = document.getElementById("user-profile-container");
+      if (profileElement && !profileElement.contains(event.target)) {
+        setIsProfileDropdownOpen(false);
+      }
+    }
+
+    // Add event listener
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Clean up
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className="header-section other-page">
@@ -69,9 +91,15 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
               </ul>
             </nav>
           </div>
+
           {isLoggedIn ? (
             <div className="col-xl-3 d-flex justify-content-end align-items-center">
-              <div className="user-profile d-flex align-items-center gap-3">
+              <div
+                id="user-profile-container"
+                className="user-profile d-flex align-items-center gap-3"
+                style={{ position: "relative", cursor: "pointer" }}
+                onClick={toggleProfileDropdown}
+              >
                 <img
                   src={profileImage}
                   alt="User Profile"
@@ -88,6 +116,53 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
                 >
                   {username}
                 </span>
+
+                {isProfileDropdownOpen && (
+                  <div
+                    className="profile-dropdown"
+                    style={{
+                      position: "absolute",
+                      top: "60px",
+                      right: "0",
+                      backgroundColor: "#fff",
+                      minWidth: "150px",
+                      boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)",
+                      zIndex: "1000",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    <ul
+                      style={{ listStyle: "none", padding: "0", margin: "0" }}
+                    >
+                      {/* <li style={{ borderBottom: "1px solid #f1f1f1" }}>
+                        <Link
+                          to="/profile"
+                          style={{
+                            display: "block",
+                            padding: "10px 15px",
+                            color: "#333",
+                            textDecoration: "none",
+                          }}
+                        >
+                          Profile
+                        </Link>
+                      </li> */}
+                      <li>
+                        <Link
+                          to="/logout"
+                          style={{
+                            display: "block",
+                            padding: "10px 15px",
+                            color: "#333",
+                            textDecoration: "none",
+                          }}
+                        >
+                          Logout
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
@@ -108,6 +183,7 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
               </div>
             </div>
           )}
+
           <div id="mobile-menu-wrap"></div>
         </div>
       </div>

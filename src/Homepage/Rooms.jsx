@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 // Import React Components
 import Header from "./Header";
 import Footer from "./Footer";
+import BookingConfirmationModal from "./BookingConfirmationModal";
 
 // Import images
 import Roomsbg from "../assets/img/rooms-bg.jpg";
@@ -14,6 +15,7 @@ import Rooms5 from "../assets/img/room/rooms-5.jpg";
 
 // Thumbnail Carousel Component
 const ThumbnailCarousel = ({ images }) => {
+  // Existing carousel code remains the same
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
 
@@ -185,6 +187,16 @@ const ThumbnailCarousel = ({ images }) => {
 };
 
 const Rooms = () => {
+  // State for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState({ type: "", price: 0 });
+
+  // Function to open modal with room details
+  const openBookingModal = (roomType, roomPrice) => {
+    setSelectedRoom({ type: roomType, price: roomPrice });
+    setIsModalOpen(true);
+  };
+
   // Add scroll functionality for hash links
   useEffect(() => {
     // Check if there's a hash in the URL when page loads
@@ -266,9 +278,12 @@ const Rooms = () => {
                       <span>Free Parking</span>
                     </div>
                   </div>
-                  <a href="#" className="primary-btn">
+                  <button
+                    onClick={() => openBookingModal("Single Room", 1000)}
+                    className="primary-btn"
+                  >
                     Book Now <i className="lnr lnr-arrow-right"></i>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -319,9 +334,12 @@ const Rooms = () => {
                       <span>Pool</span>
                     </div>
                   </div>
-                  <a href="#" className="primary-btn">
+                  <button
+                    onClick={() => openBookingModal("Double Room", 1500)}
+                    className="primary-btn"
+                  >
                     Book Now <i className="lnr lnr-arrow-right"></i>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -339,7 +357,7 @@ const Rooms = () => {
                     <h2>Suite Room</h2>
                     <div className="room-price">
                       <span>From</span>
-                      <h2>$252</h2>
+                      <h2>₹2000</h2>
                       <sub>/night</sub>
                     </div>
                   </div>
@@ -372,9 +390,12 @@ const Rooms = () => {
                       <span>Pool</span>
                     </div>
                   </div>
-                  <a href="#" className="primary-btn">
+                  <button
+                    onClick={() => openBookingModal("Suite Room", 2000)}
+                    className="primary-btn"
+                  >
                     Book Now <i className="lnr lnr-arrow-right"></i>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -392,7 +413,7 @@ const Rooms = () => {
                     <h2>Deluxe Room</h2>
                     <div className="room-price">
                       <span>From</span>
-                      <h2>$99</h2>
+                      <h2>₹3000</h2>
                       <sub>/night</sub>
                     </div>
                   </div>
@@ -425,16 +446,26 @@ const Rooms = () => {
                       <span>Pool</span>
                     </div>
                   </div>
-                  <a href="#" className="primary-btn">
+                  <button
+                    onClick={() => openBookingModal("Deluxe Room", 3000)}
+                    className="primary-btn"
+                  >
                     Book Now <i className="lnr lnr-arrow-right"></i>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      {/* Footer Section */}
+
+      {/* Booking Confirmation Modal */}
+      <BookingConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        roomType={selectedRoom.type}
+        roomPrice={selectedRoom.price}
+      />
     </div>
   );
 };

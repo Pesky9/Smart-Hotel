@@ -16,11 +16,23 @@ const Homepage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [direction, setDirection] = useState(null);
+  const [adultsCount, setAdultsCount] = useState(1);
+  const [childrenCount, setChildrenCount] = useState(0);
+  const [roomsCount, setRoomsCount] = useState(1);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState("Eg. Master suite");
 
   const slides = [
     { image: Room1, alt: "Room 1" },
     { image: Room2, alt: "Room 2" },
     { image: Room3, alt: "Room 3" },
+  ];
+
+  const roomOptions = [
+    "Eg. Master suite",
+    "Double Room",
+    "Single Room",
+    "Special Room",
   ];
 
   const nextSlide = () => {
@@ -64,6 +76,29 @@ const Homepage = () => {
         setIsTransitioning(false);
       }, 300);
     }, 300);
+  };
+
+  // Function to increment count
+  const incrementCount = (setter, value) => {
+    setter(value + 1);
+  };
+
+  // Function to decrement count
+  const decrementCount = (setter, value) => {
+    if (value > 0) {
+      setter(value - 1);
+    }
+  };
+
+  // Function to toggle select dropdown
+  const toggleSelect = () => {
+    setIsSelectOpen(!isSelectOpen);
+  };
+
+  // Function to select room option
+  const selectRoomOption = (option) => {
+    setSelectedRoom(option);
+    setIsSelectOpen(false);
   };
 
   return (
@@ -418,35 +453,292 @@ const Homepage = () => {
                         <img src={calendar} alt="" />
                       </div>
                     </div>
-                    <div className="room-quantity">
-                      <div className="single-quantity">
-                        <p>Adults</p>
-                        <div className="pro-qty">
-                          <input type="text" defaultValue="0" />
+
+                    {/* NEW SIMPLIFIED COUNTER DESIGN */}
+                    <div
+                      className="room-quantity"
+                      style={{ marginBottom: "20px" }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          marginBottom: "15px",
+                        }}
+                      >
+                        {/* Adults Counter */}
+                        <div style={{ width: "30%" }}>
+                          <p style={{ marginBottom: "10px" }}>Adults</p>
+                          <div style={{ display: "flex" }}>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                decrementCount(setAdultsCount, adultsCount)
+                              }
+                              style={{
+                                width: "30px",
+                                height: "30px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                border: "1px solid #ddd",
+                                background: "white",
+                                cursor: "pointer",
+                              }}
+                            >
+                              −
+                            </button>
+                            <div
+                              style={{
+                                width: "40px",
+                                height: "30px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                borderTop: "1px solid #ddd",
+                                borderBottom: "1px solid #ddd",
+                              }}
+                            >
+                              {adultsCount}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                incrementCount(setAdultsCount, adultsCount)
+                              }
+                              style={{
+                                width: "30px",
+                                height: "30px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                border: "1px solid #ddd",
+                                background: "white",
+                                cursor: "pointer",
+                              }}
+                            >
+                              +
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                      <div className="single-quantity">
-                        <p>Children</p>
-                        <div className="pro-qty">
-                          <input type="text" defaultValue="0" />
+
+                        {/* Children Counter */}
+                        <div style={{ width: "30%" }}>
+                          <p style={{ marginBottom: "10px" }}>Children</p>
+                          <div style={{ display: "flex" }}>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                decrementCount(setChildrenCount, childrenCount)
+                              }
+                              style={{
+                                width: "30px",
+                                height: "30px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                border: "1px solid #ddd",
+                                background: "white",
+                                cursor: "pointer",
+                              }}
+                            >
+                              −
+                            </button>
+                            <div
+                              style={{
+                                width: "40px",
+                                height: "30px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                borderTop: "1px solid #ddd",
+                                borderBottom: "1px solid #ddd",
+                              }}
+                            >
+                              {childrenCount}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                incrementCount(setChildrenCount, childrenCount)
+                              }
+                              style={{
+                                width: "30px",
+                                height: "30px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                border: "1px solid #ddd",
+                                background: "white",
+                                cursor: "pointer",
+                              }}
+                            >
+                              +
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                      <div className="single-quantity last">
-                        <p>Rooms</p>
-                        <div className="pro-qty">
-                          <input type="text" defaultValue="0" />
+
+                        {/* Rooms Counter */}
+                        <div style={{ width: "30%" }}>
+                          <p style={{ marginBottom: "10px" }}>Rooms</p>
+                          <div style={{ display: "flex" }}>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                decrementCount(setRoomsCount, roomsCount)
+                              }
+                              style={{
+                                width: "30px",
+                                height: "30px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                border: "1px solid #ddd",
+                                background: "white",
+                                cursor: "pointer",
+                              }}
+                            >
+                              −
+                            </button>
+                            <div
+                              style={{
+                                width: "40px",
+                                height: "30px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                borderTop: "1px solid #ddd",
+                                borderBottom: "1px solid #ddd",
+                              }}
+                            >
+                              {roomsCount}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                incrementCount(setRoomsCount, roomsCount)
+                              }
+                              style={{
+                                width: "30px",
+                                height: "30px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                border: "1px solid #ddd",
+                                background: "white",
+                                cursor: "pointer",
+                              }}
+                            >
+                              +
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
+
+                    {/* Custom dropdown */}
                     <div className="room-selector">
                       <p>Room</p>
-                      <select className="suit-select">
-                        <option>Eg. Master suite</option>
-                        <option value="">Double Room</option>
-                        <option value="">Single Room</option>
-                        <option value="">Special Room</option>
-                      </select>
+                      <div
+                        className="custom-select-container"
+                        style={{ position: "relative" }}
+                      >
+                        <div
+                          className="custom-select-header"
+                          onClick={toggleSelect}
+                          style={{
+                            padding: "10px 15px",
+                            border: "1px solid #ebebeb",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            background: "#fff",
+                            transition: "all 0.3s ease",
+                          }}
+                        >
+                          <span>{selectedRoom}</span>
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            style={{
+                              transform: isSelectOpen
+                                ? "rotate(180deg)"
+                                : "rotate(0)",
+                              transition:
+                                "transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55)",
+                            }}
+                          >
+                            <path
+                              d="M7 10L12 15L17 10"
+                              stroke="#333"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </div>
+
+                        {isSelectOpen && (
+                          <div
+                            className="custom-options"
+                            style={{
+                              position: "absolute",
+                              top: "calc(100% + 5px)",
+                              left: 0,
+                              right: 0,
+                              background: "#fff",
+                              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                              borderRadius: "4px",
+                              zIndex: 10,
+                              maxHeight: "200px",
+                              overflowY: "auto",
+                              animation:
+                                "dropdownOpen 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                              transformOrigin: "top center",
+                            }}
+                          >
+                            {roomOptions.map((option, index) => (
+                              <div
+                                key={index}
+                                className="custom-option"
+                                onClick={() => selectRoomOption(option)}
+                                style={{
+                                  padding: "10px 15px",
+                                  cursor: "pointer",
+                                  transition: "all 0.2s ease",
+                                  background:
+                                    selectedRoom === option
+                                      ? "#f8f3eb"
+                                      : "transparent",
+                                  animation: `optionFadeIn 0.3s ease forwards ${
+                                    index * 0.05
+                                  }s`,
+                                  opacity: 0,
+                                  transform: "translateY(10px)",
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.background = "#f8f3eb";
+                                }}
+                                onMouseLeave={(e) => {
+                                  if (selectedRoom !== option) {
+                                    e.currentTarget.style.background =
+                                      "transparent";
+                                  }
+                                }}
+                              >
+                                {option}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
+
                     <button type="button">
                       CHECK Availability <i className="lnr lnr-arrow-right"></i>
                     </button>
@@ -541,6 +833,65 @@ const Homepage = () => {
             0% { opacity: 0.6; }
             50% { opacity: 0.2; }
             100% { opacity: 0.6; }
+          }
+          
+          .quantity-counter {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #ebebeb;
+            border-radius: 4px;
+            padding: 5px 10px;
+          }
+          
+          .quantity-btn {
+            outline: none;
+          }
+          
+          .quantity-btn:hover {
+            transform: scale(1.1);
+          }
+          
+          .quantity-btn.minus:hover {
+            background: #d9d9d9;
+          }
+          
+          .quantity-btn.plus:hover {
+            background: #cea269;
+          }
+          
+          @keyframes dropdownOpen {
+            0% {
+              opacity: 0;
+              transform: scaleY(0.7);
+            }
+            70% {
+              opacity: 1;
+              transform: scaleY(1.05);
+            }
+            100% {
+              opacity: 1;
+              transform: scaleY(1);
+            }
+          }
+          
+          @keyframes optionFadeIn {
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          .custom-select-header:hover {
+            border-color: #dfa974;
+          }
+          
+          .custom-options {
+            perspective: 1000px;
+          }
+          
+          .custom-option:hover {
+            transform: translateX(5px);
           }
         `}
       </style>
