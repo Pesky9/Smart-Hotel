@@ -1,39 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import Cookies from "js-cookie";
+
 import Logo from "../assets/img/logo.png";
-import Profile from "../assets/img/profile.jpeg";
-import { BaseURL } from "../BaseURL";
 
-const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
-  const [profileImage, setProfileImage] = useState("");
-
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (token) {
-      axios
-        .get(`${BaseURL}/user/verify`, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          const userData = response.data.user;
-          setUsername(userData.uname || "User");
-          setProfileImage(Profile);
-          setIsLoggedIn(true);
-        })
-        .catch((error) => {
-          console.error("User verification error:", error);
-          Cookies.remove("token");
-          setIsLoggedIn(false);
-        });
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, []);
-
+const Header = ({ isLoggedIn, username, profileImage }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -132,7 +102,7 @@ const Header = () => {
                     <a href="/signin">Signin</a>
                   </li>
                   <li>
-                    <a href="/signup">Rgister</a>
+                    <a href="/signup">Signup</a>
                   </li>
                 </ul>
               </div>

@@ -1,8 +1,58 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import backgroundImg from "../assets/img/slider-1.jpg";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 
-const Signin = () => {
+import { BaseURL } from "../BaseURL";
+
+const Signin = ({ setIsLoggedIn }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    try {
+      setIsLoading(true);
+      const response = await axios.post(`${BaseURL}/user/login`, {
+        email,
+        password,
+      });
+      setIsLoading(false);
+      toast.success(response.data.message);
+      Cookies.set("token", response.data.token, { expires: 1 });
+      setTimeout(() => {
+        navigate("/");
+        setIsLoggedIn(true);
+      }, 2000);
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to login. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const validateForm = () => {
+    if (!email || !password) {
+      toast.error("Please fill all the fields");
+      return false;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email");
+      return false;
+    }
+    return true;
+  };
+
   return (
     <div
       style={{
@@ -14,11 +64,15 @@ const Signin = () => {
         backgroundImage: `url(${backgroundImg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
         fontFamily: "Poppins, sans-serif",
         margin: 0,
       }}
     >
+      {isLoading && (
+        <div id="preloader">
+          <div className="loader"></div>
+        </div>
+      )}
       <div
         style={{
           maxWidth: "400px",
@@ -30,12 +84,7 @@ const Signin = () => {
         }}
       >
         <div
-          style={{
-            fontSize: "25px",
-            fontWeight: "600",
-            marginBottom: "20px",
-            textAlign: "center",
-          }}
+          style={{ fontSize: "25px", fontWeight: "600", textAlign: "center" }}
         >
           Sign In
           <div
@@ -48,7 +97,7 @@ const Signin = () => {
             }}
           ></div>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: "15px" }}>
             <label
               style={{
@@ -61,8 +110,6 @@ const Signin = () => {
             </label>
             <input
               type="email"
-              placeholder="Enter your email"
-              required
               style={{
                 height: "45px",
                 width: "100%",
@@ -73,6 +120,10 @@ const Signin = () => {
                 borderBottomWidth: "2px",
                 transition: "all 0.3s ease",
               }}
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div style={{ marginBottom: "15px" }}>
@@ -87,8 +138,6 @@ const Signin = () => {
             </label>
             <input
               type="password"
-              placeholder="Enter your password"
-              required
               style={{
                 height: "45px",
                 width: "100%",
@@ -99,12 +148,14 @@ const Signin = () => {
                 borderBottomWidth: "2px",
                 transition: "all 0.3s ease",
               }}
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
           <div style={{ height: "45px", marginTop: "20px" }}>
             <input
-              type="submit"
-              value="Sign In"
               style={{
                 height: "100%",
                 width: "100%",
@@ -118,15 +169,11 @@ const Signin = () => {
                 background: "linear-gradient(135deg, #e4cc51, #86591a)",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
               }}
+              type="submit"
+              value="Sign In"
             />
           </div>
-          <div
-            style={{
-              marginTop: "15px",
-              textAlign: "center",
-              fontSize: "15px",
-            }}
-          >
+          <div style={{ marginTop: "15px", textAlign: "center" }}>
             Don't have an account?{" "}
             <Link
               to="/signup"
@@ -137,6 +184,7 @@ const Signin = () => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
