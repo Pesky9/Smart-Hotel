@@ -7,6 +7,8 @@ import Rooms from "./Homepage/Rooms";
 import Services from "./Homepage/Services";
 import News from "./Homepage/News";
 import Contact from "./Homepage/contact";
+import Signin from "./Homepage/Signin";
+import Registration from "./Homepage/Registration";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/news" element={<News />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/register" element={<Registration />} />
         </Routes>
       </BrowserRouter>
     </>

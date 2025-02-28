@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/img/logo.png";
-import Placeholder from "../assets/img/placeholder.png";
-import Phone from "../assets/img/phone.png";
 
 const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <header className="header-section other-page">
       <div className="container-fluid">
@@ -16,7 +20,11 @@ const Header = () => {
           </div>
 
           <div className="container">
-            <nav className="main-menu mobile-menu">
+            <nav
+              className={`main-menu mobile-menu ${
+                isMobileMenuOpen ? "active" : ""
+              }`}
+            >
               <ul>
                 <li>
                   <Link to="/">Home</Link>
@@ -31,16 +39,16 @@ const Header = () => {
                   <a href="#">Facilities</a>
                   <ul className="drop-menu">
                     <li>
-                      <a href="#">Junior Suit</a>
+                      <a href="/rooms#single-room">Single Room</a>
                     </li>
                     <li>
-                      <a href="#">Double Room</a>
+                      <a href="/rooms#double-room">Double Room</a>
                     </li>
                     <li>
-                      <a href="#">Senior Suit</a>
+                      <a href="/rooms#suite-room">Suite Room</a>
                     </li>
                     <li>
-                      <a href="#">Single Room</a>
+                      <a href="/rooms#deluxe-room">Deluxe Room</a>
                     </li>
                   </ul>
                 </li>
@@ -53,6 +61,7 @@ const Header = () => {
               </ul>
             </nav>
           </div>
+
           <div className="col-xl-3 d-flex justify-content-end">
             <div className="dropdown login-dropdown">
               <button className="dropdown-btn">Login</button>
@@ -61,12 +70,22 @@ const Header = () => {
                   <a href="adminlogin.html">Admin</a>
                 </li>
                 <li>
-                  <a href="login.html">User</a>
+                  <a href="/signin">User</a>
+                </li>
+                <li>
+                  <a href="/register">Register</a>
                 </li>
               </ul>
             </div>
           </div>
-          <div id="mobile-menu-wrap"></div>
+
+          <div id="mobile-menu-wrap">
+            <div className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+              <i
+                className={isMobileMenuOpen ? "fa fa-times" : "fa fa-bars"}
+              ></i>
+            </div>
+          </div>
         </div>
       </div>
     </header>
