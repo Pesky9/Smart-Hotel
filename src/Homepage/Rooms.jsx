@@ -10,8 +10,6 @@ import Rooms2 from "../assets/img/room/rooms-2.jpg";
 const Rooms = () => {
   return (
     <div>
-      <Header /> {/* Header Section */}
-      {/* Hero Section */}
       <section
         className="hero-section set-bg"
         style={{ backgroundImage: `url(${Roomsbg})` }}
@@ -93,7 +91,6 @@ const Rooms = () => {
         </div>
       </section>
       {/* Footer Section */}
-      <Footer />
     </div>
   );
 };

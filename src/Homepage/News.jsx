@@ -2,12 +2,9 @@ import React from "react";
 import logo from "../assets/img/logo.png";
 import clock from "../assets/img/clock.png";
 import speech from "../assets/img/speech.png";
-import Header from "./Header";
 const News = () => {
   return (
     <div>
-      <Header />
-
       <section className="hero-section set-bg" data-setbg="img/services-bg.jpg">
         <div className="hero-text">
           <div className="container">
@@ -151,50 +148,6 @@ const News = () => {
         </div>
       </section>
       {/* Blog Section End */}
-
-      {/* Footer Section Begin */}
-      <footer className="footer-section">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="footer-logo">
-                <a href="#">
-                  <img src={logo} alt="" />
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="row pb-50">
-            {["Location", "Reception", "Shuttle Service", "Restaurant"].map(
-              (section, i) => (
-                <div key={i} className="col-lg-3 col-sm-6">
-                  <div className="single-footer-widget">
-                    <h5>{section}</h5>
-                    <div className="widget-text">
-                      <i className="lnr lnr-phone-handset"></i>
-                      <p>+91 603-535-4592</p>
-                    </div>
-                  </div>
-                </div>
-              )
-            )}
-          </div>
-        </div>
-        <div className="copyright-area">
-          <div className="container">
-            <div className="copyright-text">
-              Copyright &copy;{" "}
-              <script>document.write(new Date().getFullYear());</script> All
-              rights reserved
-            </div>
-            <div className="privacy-links">
-              <a href="#">Privacy Policy</a>
-              <a href="#">Photo Requests</a>
-            </div>
-          </div>
-        </div>
-      </footer>
-      {/* Footer Section End */}
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-// Import images based on the locations in your HTML
 import contactBg from "../assets/img/contact-bg.jpg";
 import placeholderCopy from "../assets/img/placeholder-copy.png";
 import phoneCopy from "../assets/img/phone-copy.png";
@@ -10,38 +9,35 @@ import clockCopy from "../assets/img/clock-copy.png";
 import edit from "../assets/img/edit.png";
 import envelopCopy from "../assets/img/envelop-copy.png";
 import speechCopy from "../assets/img/speech-copy.png";
+import Header from "./Header";
+import Footer from "./Footer";
+import { BaseURL } from "../BaseURL";
 
 const Contact = () => {
-  // State for form fields
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
-  // State for loading preloader
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation: check if any field is empty
     if (!fullname || !email || !phone || !message) {
       alert("Please fill out all fields.");
       return;
     }
 
-    // Basic email format validation
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(email)) {
       alert("Please enter a valid email address.");
       return;
     }
 
-    // Show preloader
     setIsLoading(true);
 
     try {
-      // Post data to the backend
-      await axios.post("http://localhost:5000/api/v1/contact/submit", {
+      await axios.post(`${BaseURL}/contact/submit`, {
         fullname,
         email,
         phone,
@@ -73,7 +69,6 @@ const Contact = () => {
         </div>
       )}
 
-      {/* Hero Section Begin */}
       <section
         className="hero-section set-bg"
         style={{ backgroundImage: `url(${contactBg})` }}
