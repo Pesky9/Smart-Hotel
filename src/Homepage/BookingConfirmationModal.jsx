@@ -43,15 +43,31 @@ const BookingConfirmationModal = ({
     if (value >= min) setter(value);
   };
 
-  const applyCoupon = () => {
-    if (couponCode === "HOTEL20" && !couponApplied) {
-      setDiscount(20);
-      setCouponApplied(true);
-    } else if (couponCode === "HOTEL10" && !couponApplied) {
-      setDiscount(10);
-      setCouponApplied(true);
-    } else {
-      alert("Invalid coupon code or coupon already applied.");
+  const applyCoupon = async () => {
+    if (!couponCode) {
+      toast.error("Please enter a coupon code");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${BaseURL}/user/coupon`,
+        { code: couponCode },
+        { withCredentials: true }
+      );
+
+      if (response.data.success) {
+        setDiscount(response.data.discount);
+        setCouponApplied(true);
+      } else {
+        alert("Invalid coupon code or coupon already applied.");
+      }
+    } catch (error) {
+      console.error("Error applying coupon:", error);
+      toast.error(
+        error.response?.data?.message ||
+          "Error applying coupon, please try again."
+      );
     }
   };
 
@@ -107,6 +123,10 @@ const BookingConfirmationModal = ({
         price: total,
         room_type: rooms,
       };
+
+      if (couponApplied) {
+        formData.couponCode = couponCode;
+      }
 
       console.log("Form Data with Guest ID:", formData);
 
@@ -195,16 +215,26 @@ const BookingConfirmationModal = ({
               </p>
             </div>
 
-            <div
-              className="datepicker"
-              style={{ marginBottom: "20px" }}
-            >
-              <div className="row" style={{ display: "flex", flexWrap: "wrap", margin: "0 -10px" }}>
+            <div className="datepicker" style={{ marginBottom: "20px" }}>
+              <div
+                className="row"
+                style={{ display: "flex", flexWrap: "wrap", margin: "0 -10px" }}
+              >
                 {/* Check-in Date Picker */}
-                <div className="col-md-6" style={{ flex: "0 0 50%", padding: "0 10px", boxSizing: "border-box" }}>
+                <div
+                  className="col-md-6"
+                  style={{
+                    flex: "0 0 50%",
+                    padding: "0 10px",
+                    boxSizing: "border-box",
+                  }}
+                >
                   <div className="date-select">
                     <p style={{ color: "#333", marginBottom: "5px" }}>From</p>
-                    <div className="date-picker-container" style={{ position: "relative" }}>
+                    <div
+                      className="date-picker-container"
+                      style={{ position: "relative" }}
+                    >
                       <DatePicker
                         selected={checkInDate}
                         onChange={handleCheckInChange}
@@ -226,7 +256,15 @@ const BookingConfirmationModal = ({
                           color: "#333",
                         }}
                       />
-                      <i className="calendar-icon" style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)" }}>
+                      <i
+                        className="calendar-icon"
+                        style={{
+                          position: "absolute",
+                          right: "10px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                        }}
+                      >
                         <svg
                           width="20"
                           height="20"
@@ -243,11 +281,7 @@ const BookingConfirmationModal = ({
                             stroke="#888888"
                             strokeWidth="2"
                           />
-                          <path
-                            d="M3 10H21"
-                            stroke="#888888"
-                            strokeWidth="2"
-                          />
+                          <path d="M3 10H21" stroke="#888888" strokeWidth="2" />
                           <path
                             d="M8 2L8 6"
                             stroke="#888888"
@@ -267,10 +301,20 @@ const BookingConfirmationModal = ({
                 </div>
 
                 {/* Check-out Date Picker */}
-                <div className="col-md-6" style={{ flex: "0 0 50%", padding: "0 10px", boxSizing: "border-box" }}>
+                <div
+                  className="col-md-6"
+                  style={{
+                    flex: "0 0 50%",
+                    padding: "0 10px",
+                    boxSizing: "border-box",
+                  }}
+                >
                   <div className="date-select to">
                     <p style={{ color: "#333", marginBottom: "5px" }}>To</p>
-                    <div className="date-picker-container" style={{ position: "relative" }}>
+                    <div
+                      className="date-picker-container"
+                      style={{ position: "relative" }}
+                    >
                       <DatePicker
                         selected={checkOutDate}
                         onChange={handleCheckOutChange}
@@ -293,7 +337,15 @@ const BookingConfirmationModal = ({
                           color: "#333",
                         }}
                       />
-                      <i className="calendar-icon" style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)" }}>
+                      <i
+                        className="calendar-icon"
+                        style={{
+                          position: "absolute",
+                          right: "10px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                        }}
+                      >
                         <svg
                           width="20"
                           height="20"
@@ -310,11 +362,7 @@ const BookingConfirmationModal = ({
                             stroke="#888888"
                             strokeWidth="2"
                           />
-                          <path
-                            d="M3 10H21"
-                            stroke="#888888"
-                            strokeWidth="2"
-                          />
+                          <path d="M3 10H21" stroke="#888888" strokeWidth="2" />
                           <path
                             d="M8 2L8 6"
                             stroke="#888888"
