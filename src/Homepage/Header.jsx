@@ -81,6 +81,9 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
                   <Link to="/aboutus">About</Link>
                 </li>
                 <li>
+                  <Link to="/services">Services</Link>
+                </li>
+                <li>
                   <Link to="/rooms">Rooms</Link>
                 </li>
                 <li>
@@ -183,6 +186,24 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     About
+                  </Link>
+                </li>
+                <li
+                  style={{
+                    padding: "10px 20px",
+                    borderBottom: "1px solid rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <Link
+                    to="/services"
+                    style={{
+                      color: "#fff",
+                      textDecoration: "none",
+                      display: "block",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Services
                   </Link>
                 </li>
                 <li
