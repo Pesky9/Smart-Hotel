@@ -48,7 +48,7 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
           {/* Mobile menu button - visible only on mobile */}
           <div
             className="d-block d-md-none"
-            style={{ position: "absolute", left: "15px", top: "20px" }}
+            style={{ position: "absolute", right: "65px", top: "37px" }}
           >
             <button
               onClick={toggleMobileMenu}
