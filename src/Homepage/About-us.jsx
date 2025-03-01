@@ -57,7 +57,7 @@ const AboutUs = () => {
           <h2 className="text-white text-3xl">Video Hotel Tour</h2>
           <div className="mt-4">
             <a
-              href="https://www.youtube.com/watch?v=hGsVLXnFgbA"
+              href="https://youtu.be/UJEUwEJ6gH4?si=51W6JAlKfMaNATwr"
               target="_blank"
               rel="noopener noreferrer"
             >

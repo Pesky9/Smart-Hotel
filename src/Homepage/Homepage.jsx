@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Room1 from "../assets/img/room-slider/room-1.jpg";
 import Room2 from "../assets/img/room-slider/room-2.jpg";
 import Room3 from "../assets/img/room-slider/room-3.jpg";
-import calendar from "../assets/img/calendar.png";
 import RoomFooter1 from "../assets/img/room-footer-pic/room-1.jpg";
 import RoomFooter2 from "../assets/img/room-footer-pic/room-2.jpg";
 import RoomFooter3 from "../assets/img/room-footer-pic/room-3.jpg";
@@ -11,17 +10,19 @@ import Slider from "../assets/img/slider-1.jpg";
 import SurveyPopup from "./Survey";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Homepage = ({ isLoggedIn }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [direction, setDirection] = useState(null);
   const [adultsCount, setAdultsCount] = useState(1);
   const [childrenCount, setChildrenCount] = useState(0);
   const [roomsCount, setRoomsCount] = useState(1);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState("Eg. Master suite");
   const [showSurvey, setShowSurvey] = useState(false);
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(null);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -49,27 +50,11 @@ const Homepage = ({ isLoggedIn }) => {
   ];
 
   const nextSlide = () => {
-    if (isTransitioning) return;
-    setDirection("right");
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 300);
-    }, 300);
+    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
-    if (isTransitioning) return;
-    setDirection("left");
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 300);
-    }, 300);
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
   useEffect(() => {
@@ -77,18 +62,10 @@ const Homepage = ({ isLoggedIn }) => {
       nextSlide();
     }, 5000);
     return () => clearInterval(interval);
-  }, [currentSlide, isTransitioning]);
+  }, [currentSlide]);
 
   const goToSlide = (index) => {
-    if (isTransitioning || index === currentSlide) return;
-    setDirection(index > currentSlide ? "right" : "left");
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentSlide(index);
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 300);
-    }, 300);
+    setCurrentSlide(index);
   };
 
   // Function to increment count
@@ -112,6 +89,20 @@ const Homepage = ({ isLoggedIn }) => {
   const selectRoomOption = (option) => {
     setSelectedRoom(option);
     setIsSelectOpen(false);
+  };
+
+  // Function to handle check-in date change
+  const handleCheckInChange = (date) => {
+    setCheckInDate(date);
+    // If check-out date is before check-in date, reset it
+    if (checkOutDate && date > checkOutDate) {
+      setCheckOutDate(null);
+    }
+  };
+
+  // Function to handle check-out date change
+  const handleCheckOutChange = (date) => {
+    setCheckOutDate(date);
   };
 
   const Success = () => {
@@ -150,89 +141,56 @@ const Homepage = ({ isLoggedIn }) => {
             <div className="row">
               <div className="col-lg-6">
                 <div className="room-item">
-                  {/* Enhanced Carousel with Graphics */}
+                  {/* Basic Carousel */}
                   <div
-                    className="room-pic-slider room-pic-item position-relative"
+                    className="carousel-container"
                     style={{
+                      position: "relative",
+                      height: "400px",
                       overflow: "hidden",
                       borderRadius: "8px",
-                      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
                     }}
                   >
-                    {/* Slide containers with transition effects */}
-                    <div
-                      className="room-pic"
-                      style={{
-                        position: "relative",
-                        width: "100%",
-                        height: "400px", // Fixed height for consistency
-                      }}
-                    >
-                      {slides.map((slide, index) => (
-                        <div
-                          key={index}
+                    {slides.map((slide, index) => (
+                      <div
+                        key={index}
+                        className="carousel-slide"
+                        style={{
+                          position: "absolute",
+                          width: "100%",
+                          height: "100%",
+                          opacity: currentSlide === index ? 1 : 0,
+                          transition: "opacity 0.5s ease-in-out",
+                        }}
+                      >
+                        <img
+                          src={slide.image}
+                          alt={slide.alt}
                           style={{
-                            position: "absolute",
                             width: "100%",
                             height: "100%",
-                            opacity: currentSlide === index ? 1 : 0,
-                            transform:
-                              isTransitioning && currentSlide === index
-                                ? direction === "right"
-                                  ? "translateX(-100%)"
-                                  : "translateX(100%)"
-                                : isTransitioning &&
-                                  ((direction === "right" &&
-                                    (index === currentSlide + 1 ||
-                                      (currentSlide === slides.length - 1 &&
-                                        index === 0))) ||
-                                    (direction === "left" &&
-                                      (index === currentSlide - 1 ||
-                                        (currentSlide === 0 &&
-                                          index === slides.length - 1))))
-                                ? "translateX(0)"
-                                : "translateX(0)",
-                            transition:
-                              "opacity 0.6s ease, transform 0.6s ease",
-                            zIndex: currentSlide === index ? 1 : 0,
+                            objectFit: "cover",
+                          }}
+                        />
+                        <div
+                          style={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            background:
+                              "linear-gradient(transparent, rgba(0,0,0,0.7))",
+                            color: "white",
+                            padding: "20px",
+                            textAlign: "center",
                           }}
                         >
-                          <img
-                            src={slide.image}
-                            alt={slide.alt}
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                            }}
-                          />
-                          {/* Slide caption overlay */}
-                          <div
-                            style={{
-                              position: "absolute",
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              background:
-                                "linear-gradient(transparent, rgba(0,0,0,0.7))",
-                              color: "white",
-                              padding: "20px",
-                              textAlign: "center",
-                              transform: isTransitioning
-                                ? "translateY(20px)"
-                                : "translateY(0)",
-                              opacity: isTransitioning ? 0 : 1,
-                              transition:
-                                "transform 0.6s ease, opacity 0.6s ease",
-                            }}
-                          >
-                            <h3 style={{ margin: 0 }}>{slide.alt}</h3>
-                          </div>
+                          <h3 style={{ margin: 0 }}>{slide.alt}</h3>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
 
-                    {/* Enhanced Navigation Arrows */}
+                    {/* Navigation Arrows */}
                     <button
                       onClick={prevSlide}
                       className="carousel-arrow carousel-prev"
@@ -245,29 +203,15 @@ const Homepage = ({ isLoggedIn }) => {
                         color: "white",
                         border: "none",
                         borderRadius: "50%",
-                        width: "50px",
-                        height: "50px",
+                        width: "40px",
+                        height: "40px",
                         cursor: "pointer",
                         zIndex: 2,
-                        fontSize: "24px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
-                        transition: "background 0.3s, transform 0.3s",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "rgba(0,0,0,0.7)";
-                        e.currentTarget.style.transform =
-                          "translateY(-50%) scale(1.1)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "rgba(0,0,0,0.5)";
-                        e.currentTarget.style.transform =
-                          "translateY(-50%) scale(1)";
                       }}
                     >
-                      {/* Left arrow icon */}
                       <svg
                         width="24"
                         height="24"
@@ -296,29 +240,15 @@ const Homepage = ({ isLoggedIn }) => {
                         color: "white",
                         border: "none",
                         borderRadius: "50%",
-                        width: "50px",
-                        height: "50px",
+                        width: "40px",
+                        height: "40px",
                         cursor: "pointer",
                         zIndex: 2,
-                        fontSize: "24px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
-                        transition: "background 0.3s, transform 0.3s",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "rgba(0,0,0,0.7)";
-                        e.currentTarget.style.transform =
-                          "translateY(-50%) scale(1.1)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "rgba(0,0,0,0.5)";
-                        e.currentTarget.style.transform =
-                          "translateY(-50%) scale(1)";
                       }}
                     >
-                      {/* Right arrow icon */}
                       <svg
                         width="24"
                         height="24"
@@ -336,7 +266,7 @@ const Homepage = ({ isLoggedIn }) => {
                       </svg>
                     </button>
 
-                    {/* Enhanced Dots Indicators */}
+                    {/* Dots Indicators */}
                     <div
                       style={{
                         position: "absolute",
@@ -353,78 +283,28 @@ const Homepage = ({ isLoggedIn }) => {
                           key={index}
                           onClick={() => goToSlide(index)}
                           style={{
-                            width: currentSlide === index ? "30px" : "10px",
+                            width: "10px",
                             height: "10px",
-                            borderRadius:
-                              currentSlide === index ? "5px" : "50%",
+                            borderRadius: "50%",
                             background:
                               currentSlide === index
                                 ? "white"
                                 : "rgba(255,255,255,0.5)",
                             border: "none",
                             cursor: "pointer",
-                            transition: "width 0.3s, background 0.3s",
-                            position: "relative",
-                            overflow: "hidden",
                           }}
                           aria-label={`Go to slide ${index + 1}`}
-                        >
-                          {currentSlide === index && (
-                            <span
-                              style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                height: "100%",
-                                width: "100%",
-                                background: "rgba(255,255,255,0.3)",
-                                animation: "pulse 2s infinite",
-                              }}
-                            />
-                          )}
-                        </button>
+                        />
                       ))}
                     </div>
-
-                    {/* Carousel Transition Overlay */}
-                    {isTransitioning && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          background: "rgba(0,0,0,0.1)",
-                          zIndex: 1,
-                          pointerEvents: "none",
-                        }}
-                      >
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: direction === "right" ? "100%" : "0",
-                            transform: "translateY(-50%)",
-                            width: "50px",
-                            height: "50px",
-                            opacity: 0.7,
-                            animation:
-                              direction === "right"
-                                ? "slideLeft 0.6s ease"
-                                : "slideRight 0.6s ease",
-                          }}
-                        />
-                      </div>
-                    )}
                   </div>
 
                   <div className="room-text">
                     <div className="room-title">
-                      <h2>Junior Suite</h2>
+                      <h2>Single Room</h2>
                       <div className="room-price">
                         <span>From</span>
-                        <h2>₹1500</h2>
+                        <h2>₹1000</h2>
                       </div>
                     </div>
                     <div className="room-features">
@@ -452,28 +332,132 @@ const Homepage = ({ isLoggedIn }) => {
                 <div className="check-form">
                   <h2>Check Availability</h2>
                   <form action="#">
-                    <div className="datepicker">
-                      <div className="date-select">
-                        <p>From</p>
-                        <input
-                          type="text"
-                          className="datepicker-1"
-                          defaultValue="dd / mm / yyyy"
-                        />
-                        <img src={calendar} alt="" />
-                      </div>
-                      <div className="date-select to">
-                        <p>To</p>
-                        <input
-                          type="text"
-                          className="datepicker-2"
-                          defaultValue="dd / mm / yyyy"
-                        />
-                        <img src={calendar} alt="" />
+                    {/* Integrated Date Picker Section */}
+                    <div
+                      className="datepicker"
+                      style={{ marginBottom: "20px" }}
+                    >
+                      <div className="row">
+                        {/* Check-in Date Picker */}
+                        <div className="col-md-6">
+                          <div className="date-select">
+                            <p>From</p>
+                            <div className="date-picker-container">
+                              <DatePicker
+                                selected={checkInDate}
+                                onChange={handleCheckInChange}
+                                selectsStart
+                                startDate={checkInDate}
+                                endDate={checkOutDate}
+                                placeholderText="Check-in Date"
+                                className="form-control"
+                                dateFormat="dd/MM/yyyy"
+                                minDate={new Date()}
+                                monthsShown={1}
+                                showPopperArrow={false}
+                              />
+                              <i className="calendar-icon">
+                                <svg
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <rect
+                                    x="3"
+                                    y="4"
+                                    width="18"
+                                    height="18"
+                                    rx="2"
+                                    stroke="#888888"
+                                    strokeWidth="2"
+                                  />
+                                  <path
+                                    d="M3 10H21"
+                                    stroke="#888888"
+                                    strokeWidth="2"
+                                  />
+                                  <path
+                                    d="M8 2L8 6"
+                                    stroke="#888888"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                  />
+                                  <path
+                                    d="M16 2L16 6"
+                                    stroke="#888888"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                  />
+                                </svg>
+                              </i>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Check-out Date Picker */}
+                        <div className="col-md-6">
+                          <div className="date-select to">
+                            <p>To</p>
+                            <div className="date-picker-container">
+                              <DatePicker
+                                selected={checkOutDate}
+                                onChange={handleCheckOutChange}
+                                selectsEnd
+                                startDate={checkInDate}
+                                endDate={checkOutDate}
+                                minDate={checkInDate || new Date()}
+                                placeholderText="Check-out Date"
+                                className="form-control"
+                                dateFormat="dd/MM/yyyy"
+                                monthsShown={1}
+                                disabled={!checkInDate}
+                                showPopperArrow={false}
+                              />
+                              <i className="calendar-icon">
+                                <svg
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <rect
+                                    x="3"
+                                    y="4"
+                                    width="18"
+                                    height="18"
+                                    rx="2"
+                                    stroke="#888888"
+                                    strokeWidth="2"
+                                  />
+                                  <path
+                                    d="M3 10H21"
+                                    stroke="#888888"
+                                    strokeWidth="2"
+                                  />
+                                  <path
+                                    d="M8 2L8 6"
+                                    stroke="#888888"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                  />
+                                  <path
+                                    d="M16 2L16 6"
+                                    stroke="#888888"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                  />
+                                </svg>
+                              </i>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    {/* NEW SIMPLIFIED COUNTER DESIGN */}
+                    {/* Guest Counters */}
                     <div
                       className="room-quantity"
                       style={{ marginBottom: "20px" }}
@@ -655,15 +639,11 @@ const Homepage = ({ isLoggedIn }) => {
                       </div>
                     </div>
 
-                    {/* Custom dropdown */}
+                    {/* Room Selector Dropdown */}
                     <div className="room-selector">
                       <p>Room</p>
-                      <div
-                        className="custom-select-container"
-                        style={{ position: "relative" }}
-                      >
+                      <div style={{ position: "relative" }}>
                         <div
-                          className="custom-select-header"
                           onClick={toggleSelect}
                           style={{
                             padding: "10px 15px",
@@ -674,7 +654,6 @@ const Homepage = ({ isLoggedIn }) => {
                             justifyContent: "space-between",
                             alignItems: "center",
                             background: "#fff",
-                            transition: "all 0.3s ease",
                           }}
                         >
                           <span>{selectedRoom}</span>
@@ -688,8 +667,7 @@ const Homepage = ({ isLoggedIn }) => {
                               transform: isSelectOpen
                                 ? "rotate(180deg)"
                                 : "rotate(0)",
-                              transition:
-                                "transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55)",
+                              transition: "transform 0.3s ease",
                             }}
                           >
                             <path
@@ -704,7 +682,6 @@ const Homepage = ({ isLoggedIn }) => {
 
                         {isSelectOpen && (
                           <div
-                            className="custom-options"
                             style={{
                               position: "absolute",
                               top: "calc(100% + 5px)",
@@ -716,29 +693,19 @@ const Homepage = ({ isLoggedIn }) => {
                               zIndex: 10,
                               maxHeight: "200px",
                               overflowY: "auto",
-                              animation:
-                                "dropdownOpen 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                              transformOrigin: "top center",
                             }}
                           >
                             {roomOptions.map((option, index) => (
                               <div
                                 key={index}
-                                className="custom-option"
                                 onClick={() => selectRoomOption(option)}
                                 style={{
                                   padding: "10px 15px",
                                   cursor: "pointer",
-                                  transition: "all 0.2s ease",
                                   background:
                                     selectedRoom === option
                                       ? "#f8f3eb"
                                       : "transparent",
-                                  animation: `optionFadeIn 0.3s ease forwards ${
-                                    index * 0.05
-                                  }s`,
-                                  opacity: 0,
-                                  transform: "translateY(10px)",
                                 }}
                                 onMouseEnter={(e) => {
                                   e.currentTarget.style.background = "#f8f3eb";
@@ -767,7 +734,7 @@ const Homepage = ({ isLoggedIn }) => {
             </div>
           </div>
 
-          {/* Rest of the page content remains the same */}
+          {/* About Room Section */}
           <div className="about-room">
             <div className="row">
               <div className="col-lg-10 offset-lg-1">
@@ -815,6 +782,7 @@ const Homepage = ({ isLoggedIn }) => {
         </div>
       </section>
 
+      {/* Instagram Section */}
       <section className="follow-instagram">
         <div className="container">
           <div className="row">
@@ -825,6 +793,7 @@ const Homepage = ({ isLoggedIn }) => {
         </div>
       </section>
 
+      {/* Footer Images */}
       <div className="footer-room-pic">
         <div className="container-fluid">
           <div className="row">
@@ -836,31 +805,15 @@ const Homepage = ({ isLoggedIn }) => {
         </div>
       </div>
 
+      {/* CSS Styles */}
       <style>
         {`
-          @keyframes slideLeft {
-            from { left: 100%; opacity: 0.7; }
-            to { left: 0; opacity: 0; }
+          .carousel-slide {
+            backface-visibility: hidden;
           }
           
-          @keyframes slideRight {
-            from { left: 0; opacity: 0.7; }
-            to { left: 100%; opacity: 0; }
-          }
-          
-          @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 0.2; }
-            100% { opacity: 0.6; }
-          }
-          
-          .quantity-counter {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #ebebeb;
-            border-radius: 4px;
-            padding: 5px 10px;
+          .carousel-arrow:hover {
+            background: rgba(0,0,0,0.7) !important;
           }
           
           .quantity-btn {
@@ -868,49 +821,67 @@ const Homepage = ({ isLoggedIn }) => {
           }
           
           .quantity-btn:hover {
-            transform: scale(1.1);
+            background: #f0f0f0;
           }
           
-          .quantity-btn.minus:hover {
-            background: #d9d9d9;
+          /* Date Picker Styles */
+          .date-picker-container {
+            position: relative;
           }
           
-          .quantity-btn.plus:hover {
-            background: #cea269;
+          .date-picker-container .form-control {
+            width: 100%;
+            padding: 10px 35px 10px 15px;
+            border: 1px solid #ebebeb;
+            border-radius: 4px;
+            font-size: 14px;
+            height: 45px;
           }
           
-          @keyframes dropdownOpen {
-            0% {
-              opacity: 0;
-              transform: scaleY(0.7);
-            }
-            70% {
-              opacity: 1;
-              transform: scaleY(1.05);
-            }
-            100% {
-              opacity: 1;
-              transform: scaleY(1);
-            }
+          .calendar-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
           }
           
-          @keyframes optionFadeIn {
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
+          .react-datepicker {
+            font-family: inherit;
+            border: 1px solid #ebebeb;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
           }
           
-          .custom-select-header:hover {
-            border-color: #dfa974;
+          .react-datepicker__header {
+            background-color: #f8f3eb;
+            border-bottom: 1px solid #ebebeb;
           }
           
-          .custom-options {
-            perspective: 1000px;
+          .react-datepicker__day--selected,
+          .react-datepicker__day--in-selecting-range,
+          .react-datepicker__day--in-range {
+            background-color: #dfa974;
+            color: white;
           }
           
-          .custom-option:hover {
-            transform: translateX(5px);
+          .react-datepicker__day:hover {
+            background-color: #f8f3eb;
+          }
+          
+          .react-datepicker__day--keyboard-selected {
+            background-color: #dfa974;
+            color: white;
+          }
+          
+          .react-datepicker__triangle {
+            display: none;
+          }
+          
+          .react-datepicker-wrapper,
+          .react-datepicker__input-container {
+            display: block;
+            width: 100%;
           }
         `}
       </style>

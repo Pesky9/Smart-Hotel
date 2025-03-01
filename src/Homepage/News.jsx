@@ -203,7 +203,7 @@ const News = () => {
                         Your referrals: <strong>3</strong>
                       </p>
                       <p>
-                        Rewards earned: <strong>$45</strong>
+                        Rewards earned: <strong>Rs.450</strong>
                       </p>
                     </div>
                   </div>
