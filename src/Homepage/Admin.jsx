@@ -34,9 +34,9 @@ const Admin = () => {
       Cookies.set("token", response.data.token, { expires: 1 });
       setTimeout(() => {
         if (role === "admin") {
-          navigate("/dashboard/admin");
+          navigate("/admin/dashboard");
         } else if (role === "staff") {
-          navigate("/dashboard/staff");
+          navigate("/staff/dashboard");
         } else {
           toast.error("Unknown role. Please contact support.");
         }

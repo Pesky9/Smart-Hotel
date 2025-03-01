@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import Homepage from "./Homepage/Homepage";
 import AboutUs from "./Homepage/About-us";
@@ -16,20 +16,28 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Profile from "./assets/img/profile.jpeg";
 import { BaseURL } from "./BaseURL";
-import SurveyPopup from "./Homepage/Survey";
+import AdminDashboard from "./Homepage/AdminDashboard";
 
 function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  );
+}
+
+function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [profileImage, setProfileImage] = useState("");
+
+  const location = useLocation(); // Now inside Router, so no error
 
   useEffect(() => {
     const token = Cookies.get("token");
     if (token) {
       axios
-        .get(`${BaseURL}/user/verify`, {
-          withCredentials: true,
-        })
+        .get(`${BaseURL}/user/verify`, { withCredentials: true })
         .then((response) => {
           const userData = response.data.user;
           setUsername(userData.uname || "User");
@@ -44,13 +52,19 @@ function App() {
       setIsLoggedIn(false);
     }
   }, [isLoggedIn]);
+
+  // Hide Header and Footer for admin pages
+  const hideHeaderFooter = location.pathname.startsWith("/admin");
+
   return (
-    <BrowserRouter>
-      <Header
-        isLoggedIn={isLoggedIn}
-        username={username}
-        profileImage={profileImage}
-      />
+    <>
+      {!hideHeaderFooter && (
+        <Header
+          isLoggedIn={isLoggedIn}
+          username={username}
+          profileImage={profileImage}
+        />
+      )}
       <Routes>
         <Route exact path="/" element={<Homepage isLoggedIn={isLoggedIn} />} />
         <Route path="/aboutus" element={<AboutUs />} />
@@ -67,9 +81,10 @@ function App() {
           element={<Registration setIsLoggedIn={setIsLoggedIn} />}
         />
         <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>
-      <Footer />
-    </BrowserRouter>
+      {!hideHeaderFooter && <Footer />}
+    </>
   );
 }
 
