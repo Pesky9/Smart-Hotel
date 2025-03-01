@@ -18,6 +18,7 @@ import Profile from "./assets/img/profile.jpeg";
 import { BaseURL } from "./BaseURL";
 import AdminDashboard from "./Homepage/AdminDashboard";
 import StaffDashboard from "./Homepage/StaffDashboard";
+import Order from "./Homepage/Orders";
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function AppContent() {
         <Route path="/rooms" element={<Rooms />} />
         <Route path="/services" element={<Services />} />
         <Route path="/news" element={<News />} />
+        <Route path="/orders" element={<Order />} />
         <Route path="/contact" element={<Contact />} />
         <Route
           path="/signin"

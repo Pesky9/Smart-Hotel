@@ -109,6 +109,14 @@ const Homepage = ({ isLoggedIn }) => {
     toast.success("Survey Submitted!");
   };
 
+  const handleCheck = (e) => {
+    if (checkInDate && checkOutDate) {
+      toast.success("Rooms are Available!");
+    } else {
+      toast.error("Please select appropriate Date Range");
+    }
+  };
+
   return (
     <>
       <ToastContainer />
@@ -725,7 +733,11 @@ const Homepage = ({ isLoggedIn }) => {
                       </div>
                     </div>
 
-                    <button style={{ marginTop: "30px" }} type="button">
+                    <button
+                      style={{ marginTop: "30px" }}
+                      type="button"
+                      onClick={handleCheck}
+                    >
                       CHECK Availability <i className="lnr lnr-arrow-right"></i>
                     </button>
                   </form>

@@ -129,6 +129,8 @@ const BookingConfirmationModal = ({
         guest_id,
         checkin_date: checkInDate,
         checkout_date: checkOutDate,
+        price: total,
+        room_type: rooms,
       };
 
       console.log("Form Data with Guest ID:", formData);
