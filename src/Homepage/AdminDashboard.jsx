@@ -14,19 +14,21 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [modalData, setModalData] = useState({});
-
   const [rooms, setRooms] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [guests, setGuests] = useState([]);
   const [staffMembers, setStaffMembers] = useState([]);
   // Add new state for monthly booking data
   const [monthlyBookingData, setMonthlyBookingData] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -591,19 +593,6 @@ const AdminDashboard = () => {
                   here.
                 </p>
               </div>
-              <button
-                onClick={() => openModal("room")}
-                style={{
-                  background: "#28a745",
-                  color: "white",
-                  border: "none",
-                  padding: "8px 15px",
-                  borderRadius: 5,
-                  cursor: "pointer",
-                }}
-              >
-                Add Room
-              </button>
             </div>
             <table
               style={{
@@ -632,23 +621,9 @@ const AdminDashboard = () => {
                 {rooms.map((room) => (
                   <tr key={room.id} style={{ borderBottom: "1px solid #ddd" }}>
                     <td style={{ padding: 10 }}>{room.id}</td>
-                    <td style={{ padding: 10 }}>{room.type}</td>
-                    <td style={{ padding: 10 }}>{room.available}</td>
+                    <td style={{ padding: 10 }}>{room.rtype}</td>
+                    <td style={{ padding: 10 }}>{room.rstatus}</td>
                     <td style={{ padding: 10 }}>
-                      <button
-                        onClick={() => openModal("room", room)}
-                        style={{
-                          background: "#007bff",
-                          color: "white",
-                          border: "none",
-                          padding: "5px 10px",
-                          borderRadius: 5,
-                          cursor: "pointer",
-                          marginRight: 5,
-                        }}
-                      >
-                        Update
-                      </button>
                       <button
                         onClick={() => handleDelete("room", room.id)}
                         style={{
@@ -707,7 +682,7 @@ const AdminDashboard = () => {
                     User ID
                   </th>
                   <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
-                    User Name
+                    Booking Statys
                   </th>
                   <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
                     Check-in Date
@@ -716,7 +691,7 @@ const AdminDashboard = () => {
                     Check-out Date
                   </th>
                   <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
-                    Room Type
+                    Price
                   </th>
                   <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
                     Actions
@@ -729,11 +704,11 @@ const AdminDashboard = () => {
                     key={booking.id}
                     style={{ borderBottom: "1px solid #ddd" }}
                   >
-                    <td style={{ padding: 10 }}>{booking.id}</td>
-                    <td style={{ padding: 10 }}>{booking.name}</td>
-                    <td style={{ padding: 10 }}>{booking.checkIn}</td>
-                    <td style={{ padding: 10 }}>{booking.checkOut}</td>
-                    <td style={{ padding: 10 }}>{booking.type}</td>
+                    <td style={{ padding: 10 }}>{booking.guestid}</td>
+                    <td style={{ padding: 10 }}>{booking.bstatus}</td>
+                    <td style={{ padding: 10 }}>{booking.checkin_date}</td>
+                    <td style={{ padding: 10 }}>{booking.checkout_date}</td>
+                    <td style={{ padding: 10 }}>{booking.price}</td>
                     <td style={{ padding: 10 }}>
                       <button
                         onClick={() => handleDelete("booking", booking.id)}
@@ -777,19 +752,6 @@ const AdminDashboard = () => {
                 <h3>Guest Information</h3>
                 <p>Access guest profiles, preferences, and history.</p>
               </div>
-              <button
-                onClick={() => openModal("guest")}
-                style={{
-                  background: "#28a745",
-                  color: "white",
-                  border: "none",
-                  padding: "8px 15px",
-                  borderRadius: 5,
-                  cursor: "pointer",
-                }}
-              >
-                Add Guest
-              </button>
             </div>
             <table
               style={{
@@ -804,13 +766,14 @@ const AdminDashboard = () => {
                     Guest ID
                   </th>
                   <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
-                    Room ID
+                    Guest Name
+                  </th>
+
+                  <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
+                    Guest Email
                   </th>
                   <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
-                    User Name
-                  </th>
-                  <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
-                    Preferences
+                    Customer Since
                   </th>
                   <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
                     Actions
@@ -821,24 +784,10 @@ const AdminDashboard = () => {
                 {guests.map((guest) => (
                   <tr key={guest.id} style={{ borderBottom: "1px solid #ddd" }}>
                     <td style={{ padding: 10 }}>{guest.id}</td>
-                    <td style={{ padding: 10 }}>{guest.roomId}</td>
-                    <td style={{ padding: 10 }}>{guest.name}</td>
-                    <td style={{ padding: 10 }}>{guest.preferences}</td>
+                    <td style={{ padding: 10 }}>{guest.uname}</td>
+                    <td style={{ padding: 10 }}>{guest.email}</td>
+                    <td style={{ padding: 10 }}>{guest.created_at}</td>
                     <td style={{ padding: 10 }}>
-                      <button
-                        onClick={() => openModal("guest", guest)}
-                        style={{
-                          background: "#007bff",
-                          color: "white",
-                          border: "none",
-                          padding: "5px 10px",
-                          borderRadius: 5,
-                          cursor: "pointer",
-                          marginRight: 5,
-                        }}
-                      >
-                        Update
-                      </button>
                       <button
                         onClick={() => handleDelete("guest", guest.id)}
                         style={{
@@ -988,6 +937,9 @@ const AdminDashboard = () => {
                 borderRadius: 5,
                 cursor: "pointer",
                 marginTop: 10,
+              }}
+              onClick={() => {
+                navigate("/");
               }}
             >
               Confirm Logout
