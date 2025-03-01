@@ -37,6 +37,7 @@ const Header = ({ isLoggedIn, username, profileImage }) => {
 
   const handleLogout = () => {
     Cookies.remove("token");
+    navigate("/");
     location.reload();
   };
 
