@@ -3,6 +3,8 @@ import { BaseURL } from "../BaseURL";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const BookingConfirmationModal = ({
   isOpen,
@@ -11,8 +13,8 @@ const BookingConfirmationModal = ({
   roomType,
   roomPrice,
 }) => {
-  const [checkInDate, setCheckInDate] = useState("");
-  const [checkOutDate, setCheckOutDate] = useState("");
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(null);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [rooms, setRooms] = useState(1);
@@ -24,11 +26,8 @@ const BookingConfirmationModal = ({
   // Update number of nights when dates change
   useEffect(() => {
     if (checkInDate && checkOutDate) {
-      const checkIn = new Date(checkInDate);
-      const checkOut = new Date(checkOutDate);
-
       // Calculate difference in days
-      const diffTime = checkOut.getTime() - checkIn.getTime();
+      const diffTime = checkOutDate.getTime() - checkInDate.getTime();
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
       // Only set positive values
@@ -56,19 +55,20 @@ const BookingConfirmationModal = ({
     }
   };
 
-  // Validate check-in/check-out date
-  const handleCheckOutDateChange = (date) => {
-    setCheckOutDate(date);
-    if (checkInDate && date < checkInDate) {
-      alert("Check-out date cannot be before check-in date");
-      setCheckOutDate("");
+  // Handle check-in date change
+  const handleCheckInChange = (date) => {
+    setCheckInDate(date);
+    if (checkOutDate && date > checkOutDate) {
+      setCheckOutDate(null);
     }
   };
 
-  const handleCheckInDateChange = (date) => {
-    setCheckInDate(date);
-    if (checkOutDate && date > checkOutDate) {
-      setCheckOutDate("");
+  // Handle check-out date change
+  const handleCheckOutChange = (date) => {
+    setCheckOutDate(date);
+    if (checkInDate && date < checkInDate) {
+      alert("Check-out date cannot be before check-in date");
+      setCheckOutDate(null);
     }
   };
 
@@ -90,20 +90,6 @@ const BookingConfirmationModal = ({
   const { nightlyRate, subtotal, discountAmount, total, nights } =
     calculateTotal();
 
-  // Set minimum dates (today for check-in, tomorrow for check-out)
-  const today = new Date();
-  const tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 1);
-
-  const formatDateForInput = (date) => {
-    return date.toISOString().split("T")[0];
-  };
-
-  const minCheckInDate = formatDateForInput(today);
-  const minCheckOutDate = checkInDate
-    ? formatDateForInput(new Date(new Date(checkInDate).getTime() + 86400000))
-    : formatDateForInput(tomorrow);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -114,21 +100,10 @@ const BookingConfirmationModal = ({
 
       const guest_id = verifyResponse.data?.user?.id;
 
-      // const formData = {
-      //   checkInDate,
-      //   checkOutDate,
-      //   adults,
-      //   children,
-      //   rooms,
-      //   couponCode,
-      //   discount,
-      //   total,
-      //   guest_id,
-      // };
       const formData = {
         guest_id,
-        checkin_date: checkInDate,
-        checkout_date: checkOutDate,
+        checkin_date: checkInDate.toISOString().split("T")[0],
+        checkout_date: checkOutDate.toISOString().split("T")[0],
       };
 
       console.log("Form Data with Guest ID:", formData);
@@ -220,48 +195,141 @@ const BookingConfirmationModal = ({
 
             <div
               className="datepicker"
-              style={{
-                display: "flex",
-                gap: "20px",
-                marginBottom: "20px",
-              }}
+              style={{ marginBottom: "20px" }}
             >
-              <div className="date-select">
-                <p style={{ color: "#333", marginBottom: "5px" }}>
-                  Check-in Date
-                </p>
-                <input
-                  type="date"
-                  value={checkInDate}
-                  min={minCheckInDate}
-                  onChange={(e) => handleCheckInDateChange(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    color: "#333",
-                  }}
-                />
-              </div>
-              <div className="date-select">
-                <p style={{ color: "#333", marginBottom: "5px" }}>
-                  Check-out Date
-                </p>
-                <input
-                  type="date"
-                  value={checkOutDate}
-                  min={minCheckOutDate}
-                  onChange={(e) => handleCheckOutDateChange(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    color: "#333",
-                  }}
-                  disabled={!checkInDate}
-                />
+              <div className="row" style={{ display: "flex", flexWrap: "wrap", margin: "0 -10px" }}>
+                {/* Check-in Date Picker */}
+                <div className="col-md-6" style={{ flex: "0 0 50%", padding: "0 10px", boxSizing: "border-box" }}>
+                  <div className="date-select">
+                    <p style={{ color: "#333", marginBottom: "5px" }}>From</p>
+                    <div className="date-picker-container" style={{ position: "relative" }}>
+                      <DatePicker
+                        selected={checkInDate}
+                        onChange={handleCheckInChange}
+                        selectsStart
+                        startDate={checkInDate}
+                        endDate={checkOutDate}
+                        placeholderText="Check-in Date"
+                        className="form-control"
+                        dateFormat="dd/MM/yyyy"
+                        minDate={new Date()}
+                        monthsShown={1}
+                        showPopperArrow={false}
+                        style={{
+                          width: "100%",
+                          padding: "8px",
+                          paddingRight: "30px",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                          color: "#333",
+                        }}
+                      />
+                      <i className="calendar-icon" style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)" }}>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect
+                            x="3"
+                            y="4"
+                            width="18"
+                            height="18"
+                            rx="2"
+                            stroke="#888888"
+                            strokeWidth="2"
+                          />
+                          <path
+                            d="M3 10H21"
+                            stroke="#888888"
+                            strokeWidth="2"
+                          />
+                          <path
+                            d="M8 2L8 6"
+                            stroke="#888888"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                          <path
+                            d="M16 2L16 6"
+                            stroke="#888888"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </i>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Check-out Date Picker */}
+                <div className="col-md-6" style={{ flex: "0 0 50%", padding: "0 10px", boxSizing: "border-box" }}>
+                  <div className="date-select to">
+                    <p style={{ color: "#333", marginBottom: "5px" }}>To</p>
+                    <div className="date-picker-container" style={{ position: "relative" }}>
+                      <DatePicker
+                        selected={checkOutDate}
+                        onChange={handleCheckOutChange}
+                        selectsEnd
+                        startDate={checkInDate}
+                        endDate={checkOutDate}
+                        minDate={checkInDate || new Date()}
+                        placeholderText="Check-out Date"
+                        className="form-control"
+                        dateFormat="dd/MM/yyyy"
+                        monthsShown={1}
+                        disabled={!checkInDate}
+                        showPopperArrow={false}
+                        style={{
+                          width: "100%",
+                          padding: "8px",
+                          paddingRight: "30px",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                          color: "#333",
+                        }}
+                      />
+                      <i className="calendar-icon" style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)" }}>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect
+                            x="3"
+                            y="4"
+                            width="18"
+                            height="18"
+                            rx="2"
+                            stroke="#888888"
+                            strokeWidth="2"
+                          />
+                          <path
+                            d="M3 10H21"
+                            stroke="#888888"
+                            strokeWidth="2"
+                          />
+                          <path
+                            d="M8 2L8 6"
+                            stroke="#888888"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                          <path
+                            d="M16 2L16 6"
+                            stroke="#888888"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </i>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
