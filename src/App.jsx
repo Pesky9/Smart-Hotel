@@ -17,6 +17,7 @@ import Cookies from "js-cookie";
 import Profile from "./assets/img/profile.jpeg";
 import { BaseURL } from "./BaseURL";
 import AdminDashboard from "./Homepage/AdminDashboard";
+import StaffDashboard from "./Homepage/StaffDashboard";
 
 function App() {
   return (
@@ -54,7 +55,9 @@ function AppContent() {
   }, [isLoggedIn]);
 
   // Hide Header and Footer for admin pages
-  const hideHeaderFooter = location.pathname.startsWith("/admin");
+  const hideHeaderFooter =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/staff");
 
   return (
     <>
@@ -82,6 +85,7 @@ function AppContent() {
         />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/staff/dashboard" element={<StaffDashboard />} />
       </Routes>
       {!hideHeaderFooter && <Footer />}
     </>

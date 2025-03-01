@@ -5,7 +5,7 @@ import { BaseURL } from "../BaseURL";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
-const AdminDashboard = () => {
+const StaffDashboard = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
@@ -43,7 +43,7 @@ const AdminDashboard = () => {
     fetchData();
   }, [isSubmitting]);
 
-  const tabs = ["Dashboard", "Rooms", "Bookings", "Guests", "Staff", "Logout"];
+  const tabs = ["Rooms", "Bookings", "Guests", "Logout"];
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -418,47 +418,6 @@ const AdminDashboard = () => {
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case "Dashboard":
-        return (
-          <div>
-            {/* Dashboard Cards */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 20,
-                marginTop: 20,
-              }}
-            >
-              {[
-                { title: "Total Bookings", value: bookings.length },
-                {
-                  title: "Available Rooms",
-                  value: rooms.length,
-                },
-                { title: "Total Guests", value: guests.length },
-              ].map((card, index) => (
-                <div
-                  key={index}
-                  style={{
-                    background: "white",
-                    padding: 20,
-                    borderRadius: 10,
-                    textAlign: "center",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                  }}
-                >
-                  <h3 style={{ fontSize: 18, marginBottom: 10 }}>
-                    {card.title}
-                  </h3>
-                  <p style={{ fontSize: 22, fontWeight: "bold" }}>
-                    {card.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
       case "Rooms":
         return (
           <div
@@ -752,114 +711,7 @@ const AdminDashboard = () => {
             </table>
           </div>
         );
-      case "Staff":
-        return (
-          <div
-            style={{
-              background: "white",
-              padding: 20,
-              borderRadius: 10,
-              marginTop: 20,
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: 20,
-              }}
-            >
-              <div>
-                <h3>Staff Management</h3>
-                <p>Manage hotel staff, schedules, and assignments.</p>
-              </div>
-              <button
-                onClick={() => openModal("staff")}
-                style={{
-                  background: "#28a745",
-                  color: "white",
-                  border: "none",
-                  padding: "8px 15px",
-                  borderRadius: 5,
-                  cursor: "pointer",
-                }}
-              >
-                Add Staff
-              </button>
-            </div>
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                marginTop: 20,
-              }}
-            >
-              <thead>
-                <tr style={{ background: "#f0f0f0", textAlign: "left" }}>
-                  <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
-                    User ID
-                  </th>
-                  <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
-                    User Name
-                  </th>
-                  <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
-                    Email
-                  </th>
-                  <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
-                    Phone Number
-                  </th>
-                  <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
-                    Date of Birth
-                  </th>
-                  <th style={{ padding: 10, borderBottom: "2px solid #ddd" }}>
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {staffMembers.map((staff) => (
-                  <tr key={staff.id} style={{ borderBottom: "1px solid #ddd" }}>
-                    <td style={{ padding: 10 }}>{staff.id}</td>
-                    <td style={{ padding: 10 }}>{staff.uname}</td>
-                    <td style={{ padding: 10 }}>{staff.email}</td>
-                    <td style={{ padding: 10 }}>{staff.phone_number}</td>
-                    <td style={{ padding: 10 }}>{staff.dob}</td>
-                    <td style={{ padding: 10 }}>
-                      <button
-                        onClick={() => openModal("staff", staff)}
-                        style={{
-                          background: "#007bff",
-                          color: "white",
-                          border: "none",
-                          padding: "5px 10px",
-                          borderRadius: 5,
-                          cursor: "pointer",
-                          marginRight: 5,
-                        }}
-                      >
-                        Update
-                      </button>
-                      <button
-                        onClick={() => handleDelete("staff", staff.id)}
-                        style={{
-                          background: "#dc3545",
-                          color: "white",
-                          border: "none",
-                          padding: "5px 10px",
-                          borderRadius: 5,
-                          cursor: "pointer",
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        );
+
       case "Logout":
         return (
           <div
@@ -994,4 +846,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default StaffDashboard;
