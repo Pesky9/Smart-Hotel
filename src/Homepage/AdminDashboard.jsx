@@ -3,7 +3,17 @@ import slider1 from "../assets/img/slider-1.jpg";
 import profile from "../assets/img/profile.jpeg";
 import { BaseURL } from "../BaseURL";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+// Add Recharts imports for the line chart
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
@@ -15,7 +25,8 @@ const AdminDashboard = () => {
   const [bookings, setBookings] = useState([]);
   const [guests, setGuests] = useState([]);
   const [staffMembers, setStaffMembers] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Add new state for monthly booking data
+  const [monthlyBookingData, setMonthlyBookingData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +52,55 @@ const AdminDashboard = () => {
     };
 
     fetchData();
-  }, [isSubmitting]);
+  }, []);
+
+  // Add a new useEffect to process booking data for the chart
+  useEffect(() => {
+    // Process bookings data to get monthly counts
+    const processBookingData = () => {
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      const monthCounts = {};
+
+      // Initialize all months with some default values
+      months.forEach((month, index) => {
+        monthCounts[month] = Math.floor(Math.random() * 10) + 5; // Random initial data for visualization
+      });
+
+      // Count bookings for each month
+      bookings.forEach((booking) => {
+        if (booking.checkIn) {
+          const checkInDate = new Date(booking.checkIn);
+          const month = months[checkInDate.getMonth()];
+          monthCounts[month] = (monthCounts[month] || 0) + 1;
+        }
+      });
+
+      // Convert to array format for Recharts
+      const data = months.map((month) => ({
+        month,
+        bookings: monthCounts[month],
+      }));
+
+      setMonthlyBookingData(data);
+    };
+
+    if (bookings.length > 0) {
+      processBookingData();
+    }
+  }, [bookings]);
 
   const tabs = ["Dashboard", "Rooms", "Bookings", "Guests", "Staff", "Logout"];
 
@@ -63,13 +122,8 @@ const AdminDashboard = () => {
   };
 
   // Function to handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Prevent another submission while already submitting
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-
     const formData = {};
 
     // Get all form values
@@ -81,94 +135,105 @@ const AdminDashboard = () => {
       }
     }
 
-    try {
-      let response;
-      // Determine which endpoint to hit based on modalType
-      switch (modalType) {
-        case "room":
-          if (modalData.id) {
-            // Update existing room
-            response = await axios.put(
-              `${BaseURL}/dashboard/rooms/${modalData.id}`,
-              formData
-            );
-          } else {
-            // Add new room
-            response = await axios.post(
-              `${BaseURL}/dashboard/rooms/add`,
-              formData
-            );
-          }
-          break;
+    // Update the appropriate state based on modalType
+    switch (modalType) {
+      case "room":
+        if (modalData.id) {
+          // Update existing room
+          setRooms(
+            rooms.map((room) =>
+              room.id === Number.parseInt(formData.id)
+                ? { ...formData, id: Number.parseInt(formData.id) }
+                : room
+            )
+          );
+        } else {
+          // Add new room
+          setRooms([
+            ...rooms,
+            { ...formData, id: Number.parseInt(formData.id) },
+          ]);
+        }
+        break;
 
-        case "booking":
-          if (modalData.id) {
-            // Update existing booking
-            response = await axios.put(
-              `${BaseURL}/dashboard/bookings/${modalData.id}`,
-              formData
-            );
-          } else {
-            // Add new booking
-            response = await axios.post(
-              `${BaseURL}/dashboard/bookings/add`,
-              formData
-            );
-          }
-          break;
+      case "booking":
+        if (modalData.id) {
+          // Update existing booking
+          setBookings(
+            bookings.map((booking) =>
+              booking.id === Number.parseInt(formData.id)
+                ? { ...formData, id: Number.parseInt(formData.id) }
+                : booking
+            )
+          );
+        } else {
+          // Add new booking
+          setBookings([
+            ...bookings,
+            { ...formData, id: Number.parseInt(formData.id) },
+          ]);
+        }
+        break;
 
-        case "guest":
-          // Ensure the user role is set for guests
-          formData.urole = "guest";
-          if (modalData.id) {
-            // Update existing guest
-            response = await axios.put(
-              `${BaseURL}/dashboard/users/${modalData.id}`,
-              formData
-            );
-          } else {
-            // Add new guest
-            response = await axios.post(
-              `${BaseURL}/dashboard/users/add`,
-              formData
-            );
-          }
-          break;
+      case "guest":
+        if (modalData.id) {
+          // Update existing guest
+          setGuests(
+            guests.map((guest) =>
+              guest.id === Number.parseInt(formData.id)
+                ? {
+                    ...formData,
+                    id: Number.parseInt(formData.id),
+                    roomId: Number.parseInt(formData.roomId),
+                  }
+                : guest
+            )
+          );
+        } else {
+          // Add new guest
+          setGuests([
+            ...guests,
+            {
+              ...formData,
+              id: Number.parseInt(formData.id),
+              roomId: Number.parseInt(formData.roomId),
+            },
+          ]);
+        }
+        break;
 
-        case "staff":
-          // Ensure the user role is set for staff
-          formData.urole = "staff";
-          if (modalData.id) {
-            // Update existing staff member
-            response = await axios.put(
-              `${BaseURL}/dashboard/users/${modalData.id}`,
-              formData
-            );
-          } else {
-            // Add new staff member
-            response = await axios.post(
-              `${BaseURL}/dashboard/users/add`,
-              formData
-            );
-          }
-          break;
+      case "staff":
+        if (modalData.id) {
+          // Update existing staff
+          setStaffMembers(
+            staffMembers.map((staff) =>
+              staff.id === Number.parseInt(formData.id)
+                ? { ...formData, id: Number.parseInt(formData.id) }
+                : staff
+            )
+          );
+        } else {
+          // Add new staff
+          const newId =
+            staffMembers.length > 0
+              ? Math.max(...staffMembers.map((s) => s.id)) + 1
+              : 1;
+          setStaffMembers([
+            ...staffMembers,
+            {
+              ...formData,
+              id: formData.id ? Number.parseInt(formData.id) : newId,
+            },
+          ]);
+        }
+        break;
 
-        default:
-          break;
-      }
-
-      toast.success(
-        `${modalData.id ? "Updated" : "Added"} ${modalType} successfully!`
-      );
-      closeModal();
-
-      // Optionally, update local state based on response if needed
-    } catch (error) {
-      console.error("Error submitting data:", error);
-      toast.error("Error submitting data");
-    } finally {
-      setIsSubmitting(false);
+      default:
+        break;
     }
+
+    alert(`${modalData.id ? "Updated" : "Added"} ${modalType} successfully!`);
+    closeModal();
   };
 
   // Function to handle deletion
@@ -456,6 +521,48 @@ const AdminDashboard = () => {
                   </p>
                 </div>
               ))}
+            </div>
+
+            {/* Monthly Bookings Line Chart */}
+            <div
+              style={{
+                background: "white",
+                padding: 20,
+                borderRadius: 10,
+                marginTop: 20,
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <h3 style={{ fontSize: 18, marginBottom: 15 }}>
+                Monthly Booking Trends
+              </h3>
+              <div style={{ height: 300, width: "100%" }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart
+                    data={monthlyBookingData}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="bookings"
+                      stroke="#007bff"
+                      strokeWidth={2}
+                      activeDot={{ r: 8 }}
+                      name="Bookings"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
         );
@@ -905,12 +1012,6 @@ const AdminDashboard = () => {
         height: "100vh",
       }}
     >
-      {isSubmitting && (
-        <div id="preloader">
-          <div className="loader"></div>
-        </div>
-      )}
-
       {/* Sidebar */}
       <div
         style={{
@@ -945,7 +1046,7 @@ const AdminDashboard = () => {
                 }}
               >
                 <i
-                  className={`fas fa-${tab.toLowerCase().replace(" ", "-")}`}
+                  // className={`fas fa-${tab.toLowerCase().replace(" ", "-")}`}
                   style={{ width: 30 }}
                 ></i>{" "}
                 {tab}
@@ -955,6 +1056,54 @@ const AdminDashboard = () => {
         </ul>
       </div>
       {/* Main Content */}
+      <div
+        style={{
+          marginLeft: 250,
+          width: "calc(100% - 250px)",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        <header
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            background: "white",
+            padding: 15,
+            borderRadius: 10,
+            marginBottom: 20,
+          }}
+        >
+          <h2>{activeTab}</h2>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img
+              src={profile || "/placeholder.svg"}
+              alt="Admin"
+              style={{
+                width: 35,
+                height: 35,
+                borderRadius: "50%",
+                marginRight: 10,
+              }}
+            />
+            <span>Admin</span>
+          </div>
+        </header>
+
+        <div
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            padding: "0 20px 20px 20px",
+          }}
+        >
+          {renderTabContent()}
+        </div>
+      </div>
+      {/* Main Content
       <div
         style={{ marginLeft: 250, padding: 20, width: "calc(100% - 250px)" }}
       >
@@ -985,11 +1134,10 @@ const AdminDashboard = () => {
         </header>
 
         {renderTabContent()}
-      </div>
+      </div> */}
 
       {/* Modal for updates and additions */}
       <Modal />
-      <ToastContainer />
     </div>
   );
 };
