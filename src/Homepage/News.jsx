@@ -24,78 +24,17 @@ const News = () => {
     <div>
       {/* Hero Section */}
       <section
-        style={{
-          height: "400px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundImage: `url(${Services})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          color: "#fff",
-          textAlign: "center",
-          position: "relative", // Add position relative for absolute positioning of links
-        }}
+        className="hero-section set-bg"
+        style={{ backgroundImage: `url(${Services})` }}
       >
-        <div
-          style={{
-            maxWidth: "800px",
-            margin: "0 auto",
-            width: "100%",
-            display: "flex",
-            justifyContent: "flex-start",
-            paddingLeft: "25%", // This will position the News title between left and middle
-          }}
-        >
-          <h1
-            style={{
-              fontSize: "60px", // Increased from 48px
-              fontWeight: "bold",
-              marginBottom: "20px",
-              color: "white",
-            }}
-          >
-            News
-          </h1>
-        </div>
-
-        {/* Repositioned navigation links */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: "50%", // Vertically center the navigation
-            left: "30px", // Position at the left edge
-          }}
-        >
-          <a
-            href="/rooms"
-            style={{
-              color: "#fff",
-              textDecoration: "none",
-              fontSize: "18px",
-            }}
-          >
-            <i className="lnr lnr-arrow-left"></i> Rooms
-          </a>
-        </div>
-
-        <div
-          style={{
-            position: "absolute",
-            bottom: "50%", // Vertically center the navigation
-            right: "30px", // Position at the right edge
-          }}
-        >
-          <a
-            href="/contact"
-            style={{
-              color: "#fff",
-              textDecoration: "none",
-              fontSize: "18px",
-            }}
-          >
-            Contact <i className="lnr lnr-arrow-right"></i>
-          </a>
+        <div className="hero-text">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-12">
+                <h1 style={{ textAlign: "left", paddingLeft: "5%" }}>News</h1>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -203,7 +142,7 @@ const News = () => {
                         Your referrals: <strong>3</strong>
                       </p>
                       <p>
-                        Rewards earned: <strong>Rs.450</strong>
+                        Rewards earned: <strong>$45</strong>
                       </p>
                     </div>
                   </div>
@@ -415,7 +354,7 @@ const News = () => {
                   }}
                 >
                   <div style={{ marginBottom: "15px" }}>
-                    {/* <img src={`${img / blog / blog - i.jpg}`} alt="" style={{ width: "100%", borderRadius: "8px" }} /> */}
+                    {/* <img src={${img / blog / blog - i.jpg}} alt="" style={{ width: "100%", borderRadius: "8px" }} /> */}
                   </div>
                   <div>
                     <h4

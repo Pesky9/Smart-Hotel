@@ -80,11 +80,7 @@ const Contact = () => {
                 <h1>Contact</h1>
               </div>
             </div>
-            <div className="page-nav">
-              <a href="/news" className="left-nav">
-                <i className="lnr lnr-arrow-left"></i> News
-              </a>
-            </div>
+  
           </div>
         </div>
       </section>
