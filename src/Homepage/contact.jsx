@@ -80,7 +80,6 @@ const Contact = () => {
                 <h1>Contact</h1>
               </div>
             </div>
-  
           </div>
         </div>
       </section>
@@ -97,19 +96,19 @@ const Contact = () => {
                   <ul>
                     <li>
                       <img src={placeholderCopy} alt="Address Icon" />
-                      <span>1525 Boring Lane, Los Angeles, CA</span>
+                      <span>BMS College of Engineering</span>
                     </li>
                     <li>
                       <img src={phoneCopy} alt="Phone Icon" />
-                      <span>+91 603-535-4592</span>
+                      <span>+91 97-212-5679</span>
                     </li>
                     <li>
                       <img src={envelop} alt="Email Icon" />
-                      <span>hello@youremail.com</span>
+                      <span>contact@gofindstay.in</span>
                     </li>
                     <li>
                       <img src={clockCopy} alt="Clock Icon" />
-                      <span>Everyday: 06:00 -22:00</span>
+                      <span>Everyday: 06:00 AM-10:00 PM</span>
                     </li>
                   </ul>
                 </div>

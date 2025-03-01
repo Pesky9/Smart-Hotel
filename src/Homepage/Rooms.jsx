@@ -317,9 +317,12 @@ const Rooms = () => {
                   </div>
                   <div className="room-desc">
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Vivamus mauris, bibendum eget sapien ac, ultrices rhoncus
-                      ipsum.
+                      Our double rooms are perfect for couples or friends
+                      traveling together. Featuring a spacious layout with
+                      comfortable bedding, these rooms offer modern amenities
+                      and stylish decor to enhance your stay. Whether you're
+                      here for a short visit or an extended stay, enjoy a cozy
+                      and relaxing atmosphere designed for your comfort.
                     </p>
                   </div>
                   <div className="room-features">
@@ -373,9 +376,12 @@ const Rooms = () => {
                   </div>
                   <div className="room-desc">
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Vivamus mauris, bibendum eget sapien ac, ultrices rhoncus
-                      ipsum.
+                      Experience luxury and space in our elegantly designed
+                      suites. With a separate living area and a well-appointed
+                      bedroom, our suites offer the perfect balance of comfort
+                      and sophistication. Ideal for business travelers or those
+                      seeking a premium stay, each suite is thoughtfully
+                      designed to provide privacy, convenience, and relaxation.
                     </p>
                   </div>
                   <div className="room-features">
@@ -429,9 +435,12 @@ const Rooms = () => {
                   </div>
                   <div className="room-desc">
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Vivamus mauris, bibendum eget sapien ac, ultrices rhoncus
-                      ipsum.
+                      Our deluxe rooms offer an upgraded experience with extra
+                      space and enhanced amenities. Designed with stylish
+                      interiors and premium comforts, these rooms provide a
+                      refined ambiance for a truly relaxing stay. Whether you're
+                      here for work or leisure, enjoy an elevated level of
+                      luxury and convenience
                     </p>
                   </div>
                   <div className="room-features">
